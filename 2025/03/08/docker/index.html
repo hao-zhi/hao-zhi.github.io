@@ -20,13 +20,15 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="引言 Docker是什么 解决了哪些问题   Docker的原理 容器 vs. 虚拟机 Docker的核心组件 Docker底层技术   Docker的安装与配置 在Linux系统上的安装 基本配置   Docker基本使用 镜像管理 容器管理 数据持久化 网络配置   Docker进阶用法 Dockerfile编写与优化 Docker Compose简介 常见服务部署 通过SSH远程登录Doc">
+<meta property="og:type" content="article">
 <meta property="og:title" content="docker">
 <meta property="og:url" content="http://yoursite.com/2025/03/08/docker/index.html">
 <meta property="og:site_name" content="Hao Zhi">
+<meta property="og:description" content="引言 Docker是什么 解决了哪些问题   Docker的原理 容器 vs. 虚拟机 Docker的核心组件 Docker底层技术   Docker的安装与配置 在Linux系统上的安装 基本配置   Docker基本使用 镜像管理 容器管理 数据持久化 网络配置   Docker进阶用法 Dockerfile编写与优化 Docker Compose简介 常见服务部署 通过SSH远程登录Doc">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-08T03:01:19.000Z">
-<meta property="article:modified_time" content="2025-03-08T03:01:19.993Z">
+<meta property="article:modified_time" content="2025-03-21T03:10:25.028Z">
 <meta property="article:author" content="郝智">
 <meta name="twitter:card" content="summary">
 
@@ -224,6 +226,13 @@
 
               <time title="创建时间：2025-03-08 11:01:19" itemprop="dateCreated datePublished" datetime="2025-03-08T11:01:19+08:00">2025-03-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-03-21 11:10:25" itemprop="dateModified" datetime="2025-03-21T11:10:25+08:00">2025-03-21</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -252,14 +261,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
+              <span>6.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>6 分钟</span>
             </span>
 
         </div>
@@ -271,7 +280,198 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <ul>
+<li><a href="#%E5%BC%95%E8%A8%80">引言</a><ul>
+<li><a href="#docker%E6%98%AF%E4%BB%80%E4%B9%88">Docker是什么</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E9%97%AE%E9%A2%98">解决了哪些问题</a></li>
+</ul>
+</li>
+<li><a href="#docker%E7%9A%84%E5%8E%9F%E7%90%86">Docker的原理</a><ul>
+<li><a href="#%E5%AE%B9%E5%99%A8-vs-%E8%99%9A%E6%8B%9F%E6%9C%BA">容器 vs. 虚拟机</a></li>
+<li><a href="#docker%E7%9A%84%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6">Docker的核心组件</a></li>
+<li><a href="#docker%E5%BA%95%E5%B1%82%E6%8A%80%E6%9C%AF">Docker底层技术</a></li>
+</ul>
+</li>
+<li><a href="#docker%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE">Docker的安装与配置</a><ul>
+<li><a href="#%E5%9C%A8linux%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85">在Linux系统上的安装</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE">基本配置</a></li>
+</ul>
+</li>
+<li><a href="#docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">Docker基本使用</a><ul>
+<li><a href="#%E9%95%9C%E5%83%8F%E7%AE%A1%E7%90%86">镜像管理</a></li>
+<li><a href="#%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86">容器管理</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96">数据持久化</a></li>
+<li><a href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE">网络配置</a></li>
+</ul>
+</li>
+<li><a href="#docker%E8%BF%9B%E9%98%B6%E7%94%A8%E6%B3%95">Docker进阶用法</a><ul>
+<li><a href="#dockerfile%E7%BC%96%E5%86%99%E4%B8%8E%E4%BC%98%E5%8C%96">Dockerfile编写与优化</a></li>
+<li><a href="#docker-compose%E7%AE%80%E4%BB%8B">Docker Compose简介</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2">常见服务部署</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87ssh%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95docker%E5%AE%B9%E5%99%A8">通过SSH远程登录Docker容器</a></li>
+</ul>
+</li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5">相关链接</a></li>
+</ul>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><h2 id="Docker是什么"><a href="#Docker是什么" class="headerlink" title="Docker是什么"></a>Docker是什么</h2><p>&emsp;&emsp;Docker是一种基于容器的虚拟化技术，它能够将应用及其所有依赖打包到一个独立的环境中运行。Docker使应用能够在任何支持Docker的环境中运行，而不会受到底层操系统或硬件的影响。</p>
+<p>&emsp;&emsp;Docker由Docker引擎提供支持，它使用容器来运行应用程序。与传统的虚拟机不同，Docker容器直接运行在宿主机的内核之上，因此更轻量，更高效。</p>
+<p>Docker主要由以下核心组件组成:</p>
+<p>  **镜像(Image)**：应用及其环境的只读模板，可以用来创建容器。<br>  **容器(Container)**：基于镜像运行的实例，彼此隔离，类似于轻量级虚拟机。<br>  **仓库(Registry)**：存储和分发镜像的地方，如Docker Hub、阿里云镜像仓库等。</p>
+<h2 id="解决了哪些问题"><a href="#解决了哪些问题" class="headerlink" title="解决了哪些问题"></a>解决了哪些问题</h2><ol>
+<li>环境一致性问题</li>
+<li>依赖管理与部署复杂度</li>
+<li>资源占用高、启动慢</li>
+<li>持续集成与交付（CI&#x2F;CD）困难</li>
+<li>迁移和扩展困难</li>
+</ol>
+<h1 id="Docker的原理"><a href="#Docker的原理" class="headerlink" title="Docker的原理"></a>Docker的原理</h1><h2 id="容器-vs-虚拟机"><a href="#容器-vs-虚拟机" class="headerlink" title="容器 vs. 虚拟机"></a>容器 vs. 虚拟机</h2><p>&emsp;&emsp;虚拟机是传统的虚拟化方式。它通过Hypervisor(虚拟机管理程序)在宿主机上运行多个独立的操作系统，每个虚拟机都有自己的内核、文件系统和应用程序。因此，虚拟机的隔离性强，但资源开销大，启动慢。</p>
+<p>&emsp;&emsp;Docker容器不需要额外的操作系统，而是共享宿主机的内核，并利用Namespace和Cgroups进行资源隔离和管理。这样容器可以在不影响其他应用的情况下运行，并且占用更少的资源，启动速度极快。</p>
+<h2 id="Docker的核心组件"><a href="#Docker的核心组件" class="headerlink" title="Docker的核心组件"></a>Docker的核心组件</h2><ol>
+<li><p>镜像</p>
+<p>Docker镜像是一个只读模板，包含了运行应用所需的所有文件、环境变量和依赖库。Docker容器就是基于镜像创建的。</p>
+<p>通过docker pull从仓库下载镜像，例如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu:latest</span><br></pre></td></tr></table></figure>
+<p>或者通过docker build自定义构建镜像（使用Dockerfile）。</p>
+</li>
+<li><p>容器</p>
+<p>容器时镜像的运行实例，它包含了应用程序及其运行时环境，并且相互隔离。</p>
+<p>通过docker run启动一个容器，例如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it ubuntu /bin/bash</span><br></pre></td></tr></table></figure>
+<p>容器可以随时停止、重启、删除，而不会影响宿主机环境。</p>
+</li>
+<li><p>仓库</p>
+</li>
+</ol>
+<p>&emsp;&emsp;Docker Registry是存储和分发Docker镜像的地方，常见的公共镜像仓库由Docker Hub、阿里云镜像仓库等。</p>
+<p>&emsp;&emsp;docker push：上传镜像到仓库</p>
+<p>&emsp;&emsp;docker pull：从仓库拉取镜像</p>
+<h2 id="Docker底层技术"><a href="#Docker底层技术" class="headerlink" title="Docker底层技术"></a>Docker底层技术</h2><ol>
+<li>Namespace（命名空间）————资源隔离</li>
+</ol>
+<p>&emsp;&emsp;Namespace是Linux内核提供的隔离机制，Docker通过Namespace让每个容器由独立的进程、网络、文件系统等。不同容器的进程互不干扰即进程隔离，每个容器有独立的IP和端口即网络隔离，每个容器有自己的根文件系统即文件系统隔离，不同容器的共享内存、信号量等互不干扰即进程间通信隔离。</p>
+<ol start="2">
+<li>Cgroups（Control Groups）————资源控制</li>
+</ol>
+<p>&emsp;&emsp;Cgroups允许Docker限制容器的CPU、内存、网络、IO资源，防止某个容器占用过多资源，影响主机性能。如限制容器使用1个CPU核心和512MB内存：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --cpus=1 --memory=512m ubuntu</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>UnionFS（联合文件系统）————镜像分层<br>&emsp;&emsp;UnionFS是Docker镜像的存储机制，它允许多个文件系统层叠加，从而提高存储效率。Docker镜像由多个只读层组成，容器运行时会添加一个可写层。只读层是镜像的基础层（如Ubuntu、Python依赖等）。可写层是运行容器时动态创建，存储用户的修改。通过docker commit可以保存容器的可写层，形成新的镜像。</li>
+</ol>
+<h1 id="Docker的安装与配置"><a href="#Docker的安装与配置" class="headerlink" title="Docker的安装与配置"></a>Docker的安装与配置</h1><h2 id="在Linux系统上的安装"><a href="#在Linux系统上的安装" class="headerlink" title="在Linux系统上的安装"></a>在Linux系统上的安装</h2><ol>
+<li>更新系统并安装必要的依赖<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt install -y ca-certificates curl gnupg</span><br></pre></td></tr></table></figure></li>
+<li>添加Docker官方GPG密钥<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> install -m 0755 -d /etc/apt/keyrings</span><br><span class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/keyrings/docker.asc &gt; /dev/null</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> a+r /etc/apt/keyrings/docker.asc</span><br></pre></td></tr></table></figure></li>
+<li>添加Docker官方软件源<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;deb [arch=<span class="subst">$(dpkg --print-architecture)</span> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu <span class="subst">$(lsb_release -cs)</span> stable&quot;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null</span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure></li>
+<li>安装Docker引擎<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure></li>
+<li>启动并设置Docker开机自启<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> --now docker</span><br></pre></td></tr></table></figure></li>
+<li>验证Docker是否安装成功<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker --version</span><br><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure></li>
+<li>将当前用户加入Docker组（可选，避免每次使用sudo）<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> usermod -aG docker <span class="variable">$USER</span></span><br><span class="line">newgrp docker  <span class="comment"># 重新加载用户组</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><ol>
+<li>配置国内镜像加速</li>
+</ol>
+<p>&emsp;&emsp;Docker默认从Docker Hub拉取镜像，但由于网络原因，国内拉取速度较慢。可以配置国内镜像加速器（如阿里云、腾讯云等）：</p>
+<p>&emsp;&emsp;编辑Docker配置文件，若不存在，手动创建：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /etc/docker</span><br><span class="line"><span class="built_in">sudo</span> nano /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;添加以下内容，以阿里云为例：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;https://&lt;你的加速器地址&gt;&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;保存并重启Docker服务：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>修改Docker默认存储路径</li>
+</ol>
+<p>&emsp;&emsp;Docker默认将容器和镜像存储在&#x2F;var&#x2F;lib&#x2F;docker，如果磁盘空间有限，可以将存储位置修改到其他目录，如&#x2F;data&#x2F;docker。步骤如下：</p>
+<p>&emsp;&emsp;停止Docker服务</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl stop docker</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;移动默认存储目录</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /var/lib/docker /data/docker</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;修改Docker配置文件（&#x2F;etc&#x2F;docker&#x2F;daemon.json）并添加以下内容：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;data-root&quot;</span>: <span class="string">&quot;/data/docker&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;重启Docker服务</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;验证存储路径</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker info | grep <span class="string">&quot;Docker Root Dir&quot;</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>启用远程API（用于SSH远程管理）</li>
+</ol>
+<p>&emsp;&emsp;默认情况下，Docker只能在本机运行。如果需要远程管理Docker（如使用SSH连接并控制远程主机上的Docker），可以开启Docker API远程访问。步骤如下：</p>
+<p>&emsp;&emsp;修改Docker配置文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;hosts&quot;</span>: [<span class="string">&quot;tcp://0.0.0.0:2375&quot;</span>, <span class="string">&quot;unix:///var/run/docker.sock&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;重启Docker服务</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在远程客户端访问Docker主机</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> DOCKER_HOST=<span class="string">&quot;tcp://远程服务器IP:2375&quot;</span></span><br><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;如果能正确返回容器列表，则说明远程访问已启用。</p>
+<ol start="4">
+<li>限制Docker资源使用</li>
+</ol>
+<p>&emsp;&emsp;在多容器环境下，为了避免某些容器占用过多资源，可以使用Cgroups限制CPU、内存等。</p>
+<p>&emsp;&emsp;限制CPU核心数</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --cpus=1 ubuntu</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;限制内存</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --memory=512m ubuntu</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;限制CPU占用率</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --cpu-shares=512 ubuntu</span><br></pre></td></tr></table></figure>
+<h1 id="Docker基本使用"><a href="#Docker基本使用" class="headerlink" title="Docker基本使用"></a>Docker基本使用</h1><h2 id="镜像管理"><a href="#镜像管理" class="headerlink" title="镜像管理"></a>镜像管理</h2><ol>
+<li>拉取镜像<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu:20.04</span><br></pre></td></tr></table></figure></li>
+<li>列出本地镜像<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure></li>
+<li>删除镜像<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi 镜像ID</span><br></pre></td></tr></table></figure>
+&emsp;&emsp;删除未使用的镜像，节省磁盘空间<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image prune -a</span><br></pre></td></tr></table></figure></li>
+<li>使用已有容器生成新的镜像</li>
+</ol>
+<p>&emsp;&emsp;提交容器为新的镜像</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -m <span class="string">&quot;Add vim editor&quot;</span> -a <span class="string">&quot;mccxadmin&quot;</span> my-ubuntu my-ubuntu-vim:1.0</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;其中-m为添加提交信息，说明修改内容，-a作者信息，my-ubuntu为源容器名称，后者为新镜像的名称和标签。</p>
+<p>&emsp;&emsp;验证新镜像</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+
+<h2 id="容器管理"><a href="#容器管理" class="headerlink" title="容器管理"></a>容器管理</h2><ol>
+<li>运行容器<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name my-nginx -p 8080:80 nginx</span><br></pre></td></tr></table></figure></li>
+<li>查看运行中的容器</li>
+</ol>
+<p>&emsp;&emsp;显示所有运行中的容器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;显示所有已停止的容器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li><p>进入容器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it my-nginx bash</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;-it让容器交互式运行Bash命令行。</p>
+</li>
+<li><p>停止和删除容器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker stop my-nginx    <span class="comment"># 停止容器</span></span><br><span class="line">docker <span class="built_in">rm</span> my-nginx      <span class="comment"># 删除容器</span></span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;docker rm -f my-nginx强制删除正在运行的容器</p>
+</li>
+<li><p>自动重启容器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --restart=always --name auto-container my-app</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;–restart-always使容器在崩溃后自动重启，适用于生产环境。</p>
+</li>
+</ol>
+<h2 id="数据持久化"><a href="#数据持久化" class="headerlink" title="数据持久化"></a>数据持久化</h2><p>&emsp;&emsp;容器本质上式临时的，重启或删除后，内部数据会丢失，数据持久化确保数据库、日志、配置文件等关键数据不会因容器销毁而丢失，一种方式式将宿主机目录映射到容器内。基本用法如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -v /data/app:/app my-app</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这里宿主机目录：容器内目录，数据会保存在宿主机上。</p>
+<h2 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h2><p>&emsp;&emsp;Docker提供了多种网络模式，可以直接使用宿主机网络，性能能高。容器中的端口直接暴露在宿主机上，省去了-p端口映射。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --network=host nginx</span><br></pre></td></tr></table></figure>
+<h1 id="Docker进阶用法"><a href="#Docker进阶用法" class="headerlink" title="Docker进阶用法"></a>Docker进阶用法</h1><h2 id="Dockerfile编写与优化"><a href="#Dockerfile编写与优化" class="headerlink" title="Dockerfile编写与优化"></a>Dockerfile编写与优化</h2><h2 id="Docker-Compose简介"><a href="#Docker-Compose简介" class="headerlink" title="Docker Compose简介"></a>Docker Compose简介</h2><h2 id="常见服务部署"><a href="#常见服务部署" class="headerlink" title="常见服务部署"></a>常见服务部署</h2><h2 id="通过SSH远程登录Docker容器"><a href="#通过SSH远程登录Docker容器" class="headerlink" title="通过SSH远程登录Docker容器"></a>通过SSH远程登录Docker容器</h2><p>&emsp;&emsp;在Docker容器中安装SSH服务器并修改SSH端口，允许SSH远程登录容器。默认情况下，Docker容器是无SSH服务器的，如果需要远程SSH进入容器，需要手动安装和配置openssh-server。</p>
+<ol>
+<li>使用–network&#x3D;host时</li>
+</ol>
+<p>&emsp;&emsp;当使用–network&#x3D;host，容器中的SSH端口会直接映射到宿主机，无需使用-p选项进行端口映射。这种情况下配置步骤如下：</p>
+<p>&emsp;&emsp;在容器内安装OpenSSH Server</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sed -i s@/archive.ubuntu.com/@/mirrors.tuna.tsinghua.edu.cn/@g /etc/apt/sources.list &amp;&amp; apt-get update -y</span><br><span class="line">apt install -y openssh-server</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;设置SSH监听的端口号，允许root通过SSH直接登录，SSH允许密码登录：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PORT=10086</span><br><span class="line">sed -i -e <span class="string">&quot;s/^#Port 22/Port <span class="variable">$PORT</span>/&quot;</span> \</span><br><span class="line">       -e <span class="string">&#x27;s/^#PermitRootLogin prohibit-password/PermitRootLogin yes/&#x27;</span> \</span><br><span class="line">       -e <span class="string">&#x27;s/^#PasswordAuthentication yes/PasswordAuthentication yes/&#x27;</span> /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;设置密码，启动SSH服务器</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;root:root&#x27;</span> | chpasswd &amp;&amp; /etc/init.d/ssh start</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用-p时</li>
+</ol>
+<p>&emsp;&emsp;使用-p 10086:22表示把容器的22端口映射到宿主机的10086端口，这样可以通过ssh root@宿主机IP -p 10086访问。</p>
+<p>&emsp;&emsp;在容器内安装并启动SSH服务</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt install -y openssh-server</span><br><span class="line"><span class="built_in">mkdir</span> /var/run/sshd</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;root:root&#x27;</span> | chpasswd  <span class="comment"># 设置 root 账户密码</span></span><br><span class="line">sed -i <span class="string">&#x27;s/#PermitRootLogin prohibit-password/PermitRootLogin yes/&#x27;</span> /etc/ssh/sshd_config</span><br><span class="line">sed -i <span class="string">&#x27;s/#PasswordAuthentication no/PasswordAuthentication yes/&#x27;</span> /etc/ssh/sshd_config</span><br><span class="line">service ssh restart  <span class="comment"># 启动 SSH 服务</span></span><br></pre></td></tr></table></figure>
+<h1 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h1><p>&emsp;&emsp;docker仓库：<a target="_blank" rel="noopener" href="https://github.com/docker-archive/docker-ce">https://github.com/docker-archive/docker-ce</a><br>&emsp;&emsp;docker官网：<a target="_blank" rel="noopener" href="https://www.docker.com/">https://www.docker.com/</a></p>
+
     </div>
 
     
@@ -371,6 +571,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">Docker是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.</span> <span class="nav-text">解决了哪些问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">Docker的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8-vs-%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">2.1.</span> <span class="nav-text">容器 vs. 虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker%E7%9A%84%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">Docker的核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker%E5%BA%95%E5%B1%82%E6%8A%80%E6%9C%AF"><span class="nav-number">2.3.</span> <span class="nav-text">Docker底层技术</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">Docker的安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Linux%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">3.1.</span> <span class="nav-text">在Linux系统上的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-number">3.2.</span> <span class="nav-text">基本配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">Docker基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E7%AE%A1%E7%90%86"><span class="nav-number">4.1.</span> <span class="nav-text">镜像管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E7%AE%A1%E7%90%86"><span class="nav-number">4.2.</span> <span class="nav-text">容器管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">4.3.</span> <span class="nav-text">数据持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="nav-number">4.4.</span> <span class="nav-text">网络配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker%E8%BF%9B%E9%98%B6%E7%94%A8%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">Docker进阶用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile%E7%BC%96%E5%86%99%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-number">5.1.</span> <span class="nav-text">Dockerfile编写与优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-Compose%E7%AE%80%E4%BB%8B"><span class="nav-number">5.2.</span> <span class="nav-text">Docker Compose简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2"><span class="nav-number">5.3.</span> <span class="nav-text">常见服务部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87SSH%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95Docker%E5%AE%B9%E5%99%A8"><span class="nav-number">5.4.</span> <span class="nav-text">通过SSH远程登录Docker容器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">6.</span> <span class="nav-text">相关链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -406,7 +607,7 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/jiaxiyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jiaxiyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/hao-zhi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hao-zhi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
   </div>
 
@@ -469,13 +670,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">10k</span>
+    <span title="站点总字数">16k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">9 分钟</span>
+    <span title="站点阅读时长">15 分钟</span>
 </div>
 
 <!-- 网站运行时间的设置 -->
