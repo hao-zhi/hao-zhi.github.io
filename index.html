@@ -125,7 +125,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">13</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -192,6 +192,435 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2025/05/27/torch-compile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/coder2.jpg">
+      <meta itemprop="name" content="郝智">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao Zhi">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/27/torch-compile/" class="post-title-link" itemprop="url">torch compile</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-05-27 16:19:48 / 修改时间：16:20:18" itemprop="dateCreated datePublished" datetime="2025-05-27T16:19:48+08:00">2025-05-27</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2025/05/27/torch-compile/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/05/27/torch-compile/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="torch-compile-的编译流程"><a href="#torch-compile-的编译流程" class="headerlink" title="torch.compile 的编译流程"></a><code>torch.compile</code> 的编译流程</h2><p>PyTorch + Inductor + Triton的整个编译流程，特别是<code>triton kernel</code>生成与编译分析这部分的过程。</p>
+<h3 id="整体编译流程"><a href="#整体编译流程" class="headerlink" title="整体编译流程"></a>整体编译流程</h3><ol>
+<li><p>前端捕获（TorchDynamo）</p>
+<p> 捕获PyTorch的eager模型，生成一个FX Graph（中间表示IR）</p>
+</li>
+<li><p>图优化与分区（AOTAutograd + Decompositions）</p>
+<p> 对FX Graph进行算子分解（decomposition）、分区（partition）等预处理。</p>
+</li>
+<li><p>后端Lowering（Inductor）</p>
+<p> Inductor接受FX Graph，将算子Lowering成调度后语义（Schedulers）。</p>
+<p> 部分算子会映射到Triton-compatible kernels, 由Inductor创建出表示Triton的kernel源码（字符串）</p>
+</li>
+<li><p>Triton编译器调用</p>
+<p> 对于这些Triton kernel源码（通常是Python函数字符串），Triton编译器执行：</p>
+<pre><code> AST（抽象语法树）分析：将kernel函数代码解析为AST。
+ 语义检查与IR构造：建立Triton的中间表示（SSA IR）。
+ 后端代码生成：转成GPU可执行代码，比如PTX（NVIDIA）。
+</code></pre>
+</li>
+</ol>
+<h2 id="torch-compile-常用-Backend-整理（PyTorch-2-x-）"><a href="#torch-compile-常用-Backend-整理（PyTorch-2-x-）" class="headerlink" title="torch.compile 常用 Backend 整理（PyTorch 2.x+）"></a><code>torch.compile</code> 常用 Backend 整理（PyTorch 2.x+）</h2><h3 id="🧠-Backend-一览表"><a href="#🧠-Backend-一览表" class="headerlink" title="🧠 Backend 一览表"></a>🧠 Backend 一览表</h3><table>
+<thead>
+<tr>
+<th>Backend 名称</th>
+<th>描述&#x2F;特点</th>
+<th>是否默认</th>
+<th>适用场景&#x2F;建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&quot;inductor&quot;</code></td>
+<td>⚙️ 默认 backend，基于 Triton 和 C++，性能好、支持广泛</td>
+<td>✅ 默认</td>
+<td>推荐首选，支持大部分算子，适用于通用加速优化</td>
+</tr>
+<tr>
+<td><code>&quot;eager&quot;</code></td>
+<td>PyTorch 原生模式，不做编译优化</td>
+<td>❌</td>
+<td>✅ Debug 模式；模型不支持编译、想跳过加速或便于排查</td>
+</tr>
+<tr>
+<td><code>&quot;aot_eager&quot;</code></td>
+<td>AOT Autograd + Eager，开启 trace 但不做 Inductor 优化</td>
+<td>❌</td>
+<td>Debug 早期图 trace 问题；不编译后端，只记录图结构</td>
+</tr>
+<tr>
+<td><code>&quot;nvfuser&quot;</code></td>
+<td>早期 Fusion backend，面向 CUDA（正在逐步弃用）</td>
+<td>❌</td>
+<td>CUDA 模型上实验使用，不推荐新项目使用</td>
+</tr>
+<tr>
+<td><code>&quot;aot_ts_nvfuser&quot;</code></td>
+<td>TorchScript + NVFuser（图优化 + Fusion）</td>
+<td>❌</td>
+<td>适用于 TorchScript 路径；性能不一定稳定</td>
+</tr>
+<tr>
+<td><code>&quot;aot_torchxla_traced&quot;</code></td>
+<td>用于 XLA（TPU）后端，例如在 Google Cloud TPU 上</td>
+<td>❌</td>
+<td>TPU 训练任务必须使用</td>
+</tr>
+<tr>
+<td><code>&quot;aot_torchxla&quot;</code></td>
+<td>同上，非 traced 版本</td>
+<td>❌</td>
+<td>更可控但 trace 不完整，实验可用</td>
+</tr>
+<tr>
+<td><code>&quot;ipex&quot;</code></td>
+<td>Intel Extension for PyTorch，适用于 Intel CPU&#x2F;GPU</td>
+<td>❌</td>
+<td>在 Intel 平台上推荐使用（x86 CPU 加速明显）</td>
+</tr>
+<tr>
+<td><code>&quot;openxla&quot;</code> &#x2F; <code>&quot;inductor_openxla&quot;</code></td>
+<td>为 OpenXLA 项目构建的 backend，主要用于部署</td>
+<td>❌</td>
+<td>高性能部署场景，开发者可试试 OpenXLA 编译路径（还不太成熟）</td>
+</tr>
+</tbody></table>
+<h3 id="✅-常用配置示例"><a href="#✅-常用配置示例" class="headerlink" title="✅ 常用配置示例"></a>✅ 常用配置示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认使用 inductor</span></span><br><span class="line">opt_model = torch.<span class="built_in">compile</span>(model)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用指定 backend</span></span><br><span class="line">opt_model = torch.<span class="built_in">compile</span>(model, backend=<span class="string">&quot;aot_eager&quot;</span>)  <span class="comment"># 或 &quot;eager&quot; / &quot;ipex&quot; 等</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Debug 编译失败时用 fallback</span></span><br><span class="line">torch._dynamo.config.suppress_errors = <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="🔍-调试建议"><a href="#🔍-调试建议" class="headerlink" title="🔍 调试建议"></a>🔍 调试建议</h3><table>
+<thead>
+<tr>
+<th>需求</th>
+<th>推荐做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>想知道是哪个算子不支持</td>
+<td>设置 <code>TORCH_LOGS=&quot;+dynamo&quot;</code>，或 <code>TORCHDYNAMO_VERBOSE=1</code></td>
+</tr>
+<tr>
+<td>想 dump 编译图</td>
+<td><code>torch._dynamo.export(model, inputs)</code></td>
+</tr>
+<tr>
+<td>想强制 fallback 到 eager</td>
+<td>使用 backend&#x3D;”eager”，或开启 suppress_errors</td>
+</tr>
+<tr>
+<td>编译 crash，但想继续跑</td>
+<td><code>torch._dynamo.config.suppress_errors = True</code></td>
+</tr>
+<tr>
+<td>想 benchmark 对比</td>
+<td>运行多次 warmup 后手动计时</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="🚨-fallback-到-eager-有何区别？"><a href="#🚨-fallback-到-eager-有何区别？" class="headerlink" title="🚨 fallback 到 eager 有何区别？"></a>🚨 fallback 到 <code>eager</code> 有何区别？</h3><p>当 <code>torch.compile()</code> 编译失败时（如 GPU 类型不支持），会 fallback 到 <code>eager</code>，这时：</p>
+<ul>
+<li>模型依然是用 <code>model_opt = torch.compile(model)</code> 生成的；</li>
+<li>实际执行会自动使用原始 Python 模型，不再启用编译加速；</li>
+<li>与直接运行 <code>model(x)</code> 无本质区别，仅多一层包装；</li>
+<li>可以通过 <code>torch._dynamo.config.suppress_errors = True</code> 开启 fallback。</li>
+</ul>
+<hr>
+<h3 id="🧪-如何查看当前后端是否启用成功？"><a href="#🧪-如何查看当前后端是否启用成功？" class="headerlink" title="🧪 如何查看当前后端是否启用成功？"></a>🧪 如何查看当前后端是否启用成功？</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch._dynamo</span><br><span class="line"><span class="built_in">print</span>(torch._dynamo.explain(model, args))  <span class="comment"># 分析编译情况</span></span><br></pre></td></tr></table></figure>
+
+<p>或设置环境变量调试：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> TORCH_LOGS=<span class="string">&quot;+dynamo&quot;</span>     <span class="comment"># 显示编译日志</span></span><br><span class="line"><span class="built_in">export</span> TORCHDYNAMO_VERBOSE=1    <span class="comment"># 显示更多 debug 信息</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🧩-注册自定义-backend-示例（以-MUSA-为例）："><a href="#🧩-注册自定义-backend-示例（以-MUSA-为例）：" class="headerlink" title="🧩 注册自定义 backend 示例（以 MUSA 为例）："></a>🧩 注册自定义 backend 示例（以 MUSA 为例）：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">musa_backend</span>(<span class="params">gm, example_inputs</span>):</span><br><span class="line">    <span class="comment"># 替代 torch._inductor.compile_fx 的逻辑</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> compiled_fn</span><br><span class="line"></span><br><span class="line">torch._dynamo.optimizations.backends.register_backend(<span class="string">&quot;musa_inductor&quot;</span>, musa_backend)</span><br><span class="line"></span><br><span class="line">opt_model = torch.<span class="built_in">compile</span>(model, backend=<span class="string">&quot;musa_inductor&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2025/05/27/GPU-Performance/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/coder2.jpg">
+      <meta itemprop="name" content="郝智">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao Zhi">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/27/GPU-Performance/" class="post-title-link" itemprop="url">GPU Performance</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-05-27 16:18:04 / 修改时间：16:18:48" itemprop="dateCreated datePublished" datetime="2025-05-27T16:18:04+08:00">2025-05-27</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2025/05/27/GPU-Performance/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/05/27/GPU-Performance/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="GPU算力与带宽指标以及测试方法"><a href="#GPU算力与带宽指标以及测试方法" class="headerlink" title="GPU算力与带宽指标以及测试方法"></a>GPU算力与带宽指标以及测试方法</h1><p>来源项目：智源基础规格评测</p>
+<h2 id="算力"><a href="#算力" class="headerlink" title="算力"></a>算力</h2><h3 id="测试项"><a href="#测试项" class="headerlink" title="测试项"></a>测试项</h3><p>数据类型包括：BF16、FP16、FP32、FP64、FP8、INT8、TF32等。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>位宽</th>
+<th>精度范围</th>
+<th>特点与用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FP64</td>
+<td>64位</td>
+<td>极高精度</td>
+<td>科学计算、金融分析、高精度仿真</td>
+</tr>
+<tr>
+<td>FP32</td>
+<td>32位</td>
+<td>高精度</td>
+<td>深度学习训练常用默认精度</td>
+</tr>
+<tr>
+<td>TF32</td>
+<td>19-bit (in 32-bit slot)</td>
+<td>FP32范围，精度低于FP32</td>
+<td>NVIDIA特有：用于加速训练，保持数值稳定性</td>
+</tr>
+<tr>
+<td>FP16</td>
+<td>16位</td>
+<td>中精度</td>
+<td>深度学习训练和推理中的主流低精度格式</td>
+</tr>
+<tr>
+<td>BF16</td>
+<td>16位</td>
+<td>FP32范围，精度低</td>
+<td>Google主推：训练更稳定，兼容FP32范围</td>
+</tr>
+<tr>
+<td>FP8</td>
+<td>8位</td>
+<td>精度非常低</td>
+<td>最新研究方向，推理为主（如 transformer 推理）</td>
+</tr>
+<tr>
+<td>INT8</td>
+<td>8位</td>
+<td>离散整数</td>
+<td>推理加速，速度快，功耗低，量化模型常用</td>
+</tr>
+</tbody></table>
+<h3 id="算力的定义"><a href="#算力的定义" class="headerlink" title="算力的定义"></a>算力的定义</h3><p>指系统处理数据、执行计算任务的能力，通常以单位时间内完成的计算量衡量。</p>
+<p>TFLOPS常用于AI推理芯片，统计的是每秒的操作次数。</p>
+<h3 id="算力的测试方法"><a href="#算力的测试方法" class="headerlink" title="算力的测试方法"></a>算力的测试方法</h3><p>调用通用矩阵乘法进行测试，m*k,k*n的两个矩阵一次iter，ops&#x3D;m*n*k*2(每次乘加运算共两次)，这个值除以耗时。</p>
+<h2 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h2><p>包括interconnect-MPI_interserver、interconnect-MPI_intraserver、interconnect-P2P_interserver、interconnect-P2P_intraserver、interconnect-h2d、main_memory-bandwidth、main_memory-capacity</p>
+<table>
+<thead>
+<tr>
+<th>项目名称</th>
+<th>测什么？</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>interconnect-MPI_interserver</td>
+<td>跨机 MPI 带宽&#x2F;延迟</td>
+<td>多节点训练</td>
+</tr>
+<tr>
+<td>interconnect-MPI_intraserver</td>
+<td>单机 MPI 通信</td>
+<td>多进程训练、NUMA 架构</td>
+</tr>
+<tr>
+<td>interconnect-P2P_interserver</td>
+<td>跨机 GPU 直连传输</td>
+<td>GPU RDMA 通信评估</td>
+</tr>
+<tr>
+<td>interconnect-P2P_intraserver</td>
+<td>单机 GPU 直连传输</td>
+<td>多 GPU 通信，NVLink 性能评估</td>
+</tr>
+<tr>
+<td>interconnect-h2d</td>
+<td>CPU → GPU 传输带宽</td>
+<td>DataLoader 吞吐测试</td>
+</tr>
+<tr>
+<td>main_memory-bandwidth</td>
+<td>内存带宽</td>
+<td>大批数据加载、预处理性能评估</td>
+</tr>
+<tr>
+<td>main_memory-capacity</td>
+<td>内存容量</td>
+<td>检查是否能跑大模型</td>
+</tr>
+</tbody></table>
+<p>interconnect-MPI_intraserver：调用all reduce算子测试。</p>
+<p><a target="_blank" rel="noopener" href="https://tech.preferred.jp/en/blog/technologies-behind-distributed-deep-learning-allreduce/">https://tech.preferred.jp/en/blog/technologies-behind-distributed-deep-learning-allreduce/</a></p>
+<p>计算方式：它通过将计算和通信均匀地分布在所有参与进程上来消除瓶颈进程。</p>
+<p>数据大小SIZE，进程个数gpu_nums，2*SIZE*（gpu_nums-1）&#x2F;gpu_Nums&#x2F;times</p>
+<p>interconnect-P2P_intraserver：服务器内不同设备之间点对点互联带宽，衡量GPU到GPU之间的通信速度。不经过host。</p>
+<p>计算方式：SIZE&#x2F;times</p>
+<p>interconnect-h2d：从主机向设备端传输数据的带宽。</p>
+<p>计算方式：SIZE&#x2F;times</p>
+<p>main_memory-bandwidth：设备显存带宽</p>
+<p>计算方式：从显存读取，再写入到显存。global memory的读+写，所以2*SIZE&#x2F;times</p>
+<p>main_memory-capacity：显存容量</p>
+<p>计算方法：在不崩溃、不 OOM 的情况下，可以分配的显存总量。循环分配多个 block 的显存，直到 <code>musaMalloc</code> 失败，记录已成功分配的总量，即为主存容量估计。</p>
+<h2 id="benchmark"><a href="#benchmark" class="headerlink" title="benchmark"></a>benchmark</h2><p>PyTorch算子或原语，调用pytorch算子测试。</p>
+<p>调用torch.mm算子来测试算力，计算方法与toolkit相同。</p>
+<h2 id="toolkit"><a href="#toolkit" class="headerlink" title="toolkit"></a>toolkit</h2><p>厂商专用工具，二进制可执行文件或者CUDA C&#x2F;C++源码，直接调用C++代码。</p>
+<p>有的调用了mudnn有的调用了mublas的matmal，调用mudnn就是cpp文件，调用mublas就是mu文件。</p>
+<p>计算方式是一样的，做矩阵乘法m*k,k*n的两个矩阵一次iter，ops&#x3D;m*n*k*2(每次乘加运算共两次)</p>
+<p>TFLOPS &#x3D; FLOPS &#x2F; 1.0e12;</p>
+<p><img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/NpQlK5MXNVW2QqDv/img/51bc58ba-3880-4fc8-9d83-56b9b708258f.png" alt="image.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1393,240 +1822,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/09/25/dB-dBm%E4%B8%8EdBw/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/coder2.jpg">
-      <meta itemprop="name" content="郝智">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hao Zhi">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/25/dB-dBm%E4%B8%8EdBw/" class="post-title-link" itemprop="url">dB,dBm与dBw</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-25 11:56:57" itemprop="dateCreated datePublished" datetime="2023-09-25T11:56:57+08:00">2023-09-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-08 10:55:40" itemprop="dateModified" datetime="2025-03-08T10:55:40+08:00">2025-03-08</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2023/09/25/dB-dBm%E4%B8%8EdBw/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2023/09/25/dB-dBm%E4%B8%8EdBw/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>989</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="dB、dBm与dBw"><a href="#dB、dBm与dBw" class="headerlink" title="dB、dBm与dBw"></a>dB、dBm与dBw</h1><h2 id="dB"><a href="#dB" class="headerlink" title="dB"></a>dB</h2><p>​		dB是无线通信中的基本概念。如“传播损耗是 dB”、“发射功率是dBm”、“天线增益是dBi”。</p>
-<p>​		最常见的3dB，它在功率图或者误码率图中经常出现，下降3dB就是指功率下降一半，3dB点指的就是半功率点。</p>
-<p>​		+3dB表示增大为原来的两倍，-3dB表示下降为原来的1&#x2F;2.</p>
-<blockquote>
-<p>dB &#x3D; 10lg(P1&#x2F;P0)</p>
-</blockquote>
-<p>​		dB表示功率P1相对于参考功率P0的大小关系。</p>
-<p>​		常用的dB值中，+10dB表示功率增加为原来的10倍，-10dB表示功率减小为原来的1&#x2F;10.</p>
-<p>​		可见，dB是一个相对值，它的作用是把一个很大或者很小的数，用一个简短的形式表达出来。这可以极大的方便我们的计算和描述。尤其是在绘制表格的时候，如果没有换算成dB，那么坐标轴将很长无法表示。</p>
-<blockquote>
-<p>功率变化增大到原来的100000000倍，用dB表示为10lg10^8 &#x3D; 80dB，减小到原来的0.00000001倍，用dB表示为-80dB。</p>
-</blockquote>
-<h2 id="dBm与dBw"><a href="#dBm与dBw" class="headerlink" title="dBm与dBw"></a>dBm与dBw</h2><p>​		这是最常用的两个单位。它们对应的就是把dB公式中的参考功率P0分别变换成1mW、1W。由于1mW、1W都是确定的值，因此dBm和dBw都可以表示功率的绝对值。</p>
-<p><img src="/images/db/convert.png" alt="convert"></p>
-<p>​		这里需要特别记住的是1W&#x3D;30dBm。</p>
-<blockquote>
-<p>例子：44dBm &#x3D; 30dBm + 10dB + 10dB - 3dB -3dB，<br>因此44dBm &#x3D; 1W×10×10&#x2F;2&#x2F;2 &#x3D; 25W</p>
-</blockquote>
-<p>​		这里需要注意，等式右侧除了30dBm，其余的拆分项都要用dB表示。即用一个dBx减另一个dBx时，得到的结果用dB表示。如功率46dBm比功率40dBm大6dB。</p>
-<p>​		另外要注意dB是相对值，而dBm和dBw则对应的是绝对值。</p>
-<blockquote>
-<p>例如46dB表示P1为P0的4万倍，46dBm表示P1的值为40W。</p>
-</blockquote>
-<p>​		dB家族中常见的还有dBi、dBd、dBc。 它们的计算方法与dB的计算方法完全一样，表示的还是功率的相对值。不同的是，它们的参考基准不同，即分母上的参考功率P0 所代表的含义不同。</p>
-<p>​		此外，dB家族不仅可以表示功率的增益和损耗，还可以表示电压、电流、音频等，大家要具体场景具体应用。需要注意的是，对于功率的增益，我们用10lg(Po &#x2F;Pi )，对于电压和电流的增益，要用20lg(Vo &#x2F;Vi )、20lg(Io &#x2F;Ii)。</p>
-<h2 id="dB家族"><a href="#dB家族" class="headerlink" title="dB家族"></a>dB家族</h2><p><img src="/images/db/family.png" alt="family"></p>
-
-      
-    </div>
-
-    
-    
-    
-      
-
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/09/25/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/coder2.jpg">
-      <meta itemprop="name" content="郝智">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hao Zhi">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/25/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" class="post-title-link" itemprop="url">傅里叶变换</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-25 10:48:27" itemprop="dateCreated datePublished" datetime="2023-09-25T10:48:27+08:00">2023-09-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-08 10:55:40" itemprop="dateModified" datetime="2025-03-08T10:55:40+08:00">2025-03-08</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2023/09/25/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2023/09/25/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>快速傅里叶变换（Fast Fourier Transform，FFT）</code>是一种高效计算离散傅里叶变换（Discrete Fourier Transform，DFT）的算法。它通过利用傅里叶变换的对称性和周期性，将计算复杂度从O(N^2)降低到O(N log N)，其中N是信号长度。</p>
-<p>傅里叶变换将一个信号（或序列）从时域转换到频域，它将信号分解为一系列正弦和余弦函数（频谱成分），表示每个频率成分的振幅和相位。DFT是计算离散信号的傅里叶变换，它将信号离散化为一系列离散采样点。</p>
-<p>FFT算法的核心思想是基于”分治法”，它将DFT的计算分解为一系列较小的DFT计算。它利用了傅里叶变换的周期性和对称性质，将一个长度为N的DFT分解为多个长度为N&#x2F;2的DFT，然后再将这些子问题分解为更小的子问题，以此类推，直到最终计算得到长度为1的DFT。</p>
-<h2 id="FFT算法的主要步骤"><a href="#FFT算法的主要步骤" class="headerlink" title="FFT算法的主要步骤"></a>FFT算法的主要步骤</h2><ol>
-<li>如果输入序列长度为1，则直接返回该值作为DFT结果。</li>
-<li>将输入序列分为偶数索引和奇数索引两个子序列。</li>
-<li>对这两个子序列分别进行递归的FFT计算，得到它们的DFT结果。</li>
-<li>利用DFT结果计算原始序列的DFT结果。这一步骤涉及到频域中的旋转因子（复数），用于将两个子序列的DFT结果结合起来得到原始序列的DFT结果。</li>
-<li>重复上述步骤，直到得到最终的DFT结果。</li>
-</ol>
-<p>FFT算法通过将问题分解为更小的子问题，有效地减少了计算量。它的关键在于计算复杂度为O(N log N)，相比直接计算DFT的O(N^2)大大降低了计算时间。因此，FFT广泛应用于信号处理、频谱分析、图像处理和许多其他领域。</p>
-<p>FFT算法的主要思想是通过将信号分解为多个子问题，利用傅里叶变换的性质减少计算量。其中最常用的是Cooley-Tukey算法，该算法使用了迭代的方式，将FFT问题分解为较小规模的子问题。</p>
-<h2 id="Cooley-Tukey算法的基本原理"><a href="#Cooley-Tukey算法的基本原理" class="headerlink" title="Cooley-Tukey算法的基本原理"></a>Cooley-Tukey算法的基本原理</h2><ol>
-<li>将输入信号分为偶数索引和奇数索引两个子序列。</li>
-<li>对子序列进行递归地进行FFT计算。</li>
-<li>计算旋转因子，通过乘以旋转因子将奇数索引子序列与偶数索引子序列合并。</li>
-<li>重复以上步骤，直到最后得到FFT结果。</li>
-</ol>
-<p>Cooley-Tukey算法利用了傅里叶变换的对称性和周期性，通过将问题分解为较小规模的子问题，大大减少了计算量。该算法的时间复杂度为O(NlogN)，比直接计算傅里叶变换的O(N^2)更高效。</p>
-<p>FFT算法在实际应用中具有广泛的应用，例如频谱分析、滤波、信号压缩等。它能够有效地处理大量数据，并提供了高精度和高效率的频域分析。</p>
-
-      
-    </div>
-
-    
-    
-    
-      
-
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1698,7 +1893,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1731,6 +1926,12 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
+          <a href="/2025/05/27/torch-compile/" title="2025&#x2F;05&#x2F;27&#x2F;torch-compile&#x2F;">torch compile</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2025/05/27/GPU-Performance/" title="2025&#x2F;05&#x2F;27&#x2F;GPU-Performance&#x2F;">GPU Performance</a>
+        </li>
+        <li class="links-of-recent-posts-item">
           <a href="/2025/05/27/GPU_performance_n_memory_bandwidth/" title="2025&#x2F;05&#x2F;27&#x2F;GPU_performance_n_memory_bandwidth&#x2F;"></a>
         </li>
         <li class="links-of-recent-posts-item">
@@ -1738,12 +1939,6 @@
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/2025/03/08/docker/" title="2025&#x2F;03&#x2F;08&#x2F;docker&#x2F;">docker</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/2024/02/15/%E9%9D%A2%E8%AF%95/" title="2024&#x2F;02&#x2F;15&#x2F;面试&#x2F;">面试</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/2023/09/25/matlab%E6%9F%A5%E7%9C%8B%E5%B7%A5%E7%A8%8B%E4%B8%AD%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB/" title="2023&#x2F;09&#x2F;25&#x2F;matlab查看工程中函数的调用关系&#x2F;">matlab查看工程中函数的调用关系</a>
         </li>
     </ul>
   </div>
@@ -1781,13 +1976,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">18k</span>
+    <span title="站点总字数">22k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">16 分钟</span>
+    <span title="站点阅读时长">20 分钟</span>
 </div>
 
 <!-- 网站运行时间的设置 -->
