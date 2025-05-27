@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="torch.compile 的编译流程PyTorch + Inductor + Triton的整个编译流程，特别是triton kernel生成与编译分析这部分的过程。 整体编译流程 前端捕获（TorchDynamo）  捕获PyTorch的eager模型，生成一个FX Graph（中间表示IR）  图优化与分区（AOTAutograd + Decompositions）  对FX Graph进行">
+  <meta name="description" content="pdb debug工具介绍pdb是Python内置的交互式源代码调试器，提供了设置断点、单步执行、查看堆栈帧、检查变量等功能，帮助开发者有效地调试代码。 基本用法 在代码中设置断点  在需要调试的代码位置插入以下代码行 12import pdbpdb.set_trace()   使用内置的breakpoint()函数（适用于Python3.7及以上版本）  从Python3.7开始，可以使用内置的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="torch compile">
-<meta property="og:url" content="http://yoursite.com/2025/05/27/torch-compile/index.html">
+<meta property="og:title" content="pdb debug">
+<meta property="og:url" content="http://yoursite.com/2025/05/27/pdb-debug/index.html">
 <meta property="og:site_name" content="Hao Zhi">
-<meta property="og:description" content="torch.compile 的编译流程PyTorch + Inductor + Triton的整个编译流程，特别是triton kernel生成与编译分析这部分的过程。 整体编译流程 前端捕获（TorchDynamo）  捕获PyTorch的eager模型，生成一个FX Graph（中间表示IR）  图优化与分区（AOTAutograd + Decompositions）  对FX Graph进行">
+<meta property="og:description" content="pdb debug工具介绍pdb是Python内置的交互式源代码调试器，提供了设置断点、单步执行、查看堆栈帧、检查变量等功能，帮助开发者有效地调试代码。 基本用法 在代码中设置断点  在需要调试的代码位置插入以下代码行 12import pdbpdb.set_trace()   使用内置的breakpoint()函数（适用于Python3.7及以上版本）  从Python3.7开始，可以使用内置的">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-05-27T08:19:48.000Z">
-<meta property="article:modified_time" content="2025-05-27T08:20:18.446Z">
+<meta property="article:published_time" content="2025-05-27T08:36:16.000Z">
+<meta property="article:modified_time" content="2025-05-27T08:36:37.206Z">
 <meta property="article:author" content="郝智">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2025/05/27/torch-compile/">
+<link rel="canonical" href="http://yoursite.com/2025/05/27/pdb-debug/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>torch compile | Hao Zhi</title>
+  <title>pdb debug | Hao Zhi</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WGS6S6YFJ6"></script>
     <script>
@@ -201,7 +201,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2025/05/27/torch-compile/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2025/05/27/pdb-debug/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/coder2.jpg">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          torch compile
+          pdb debug
         </h1>
 
         <div class="post-meta">
@@ -225,7 +225,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2025-05-27 16:19:48 / 修改时间：16:20:18" itemprop="dateCreated datePublished" datetime="2025-05-27T16:19:48+08:00">2025-05-27</time>
+              <time title="创建时间：2025-05-27 16:36:16 / 修改时间：16:36:37" itemprop="dateCreated datePublished" datetime="2025-05-27T16:36:16+08:00">2025-05-27</time>
             </span>
 
           
@@ -244,8 +244,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2025/05/27/torch-compile/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2025/05/27/torch-compile/" itemprop="commentCount"></span>
+    <a title="valine" href="/2025/05/27/pdb-debug/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/05/27/pdb-debug/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -255,14 +255,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.5k</span>
+              <span>577</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -274,138 +274,39 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="torch-compile-的编译流程"><a href="#torch-compile-的编译流程" class="headerlink" title="torch.compile 的编译流程"></a><code>torch.compile</code> 的编译流程</h2><p>PyTorch + Inductor + Triton的整个编译流程，特别是<code>triton kernel</code>生成与编译分析这部分的过程。</p>
-<h3 id="整体编译流程"><a href="#整体编译流程" class="headerlink" title="整体编译流程"></a>整体编译流程</h3><ol>
-<li><p>前端捕获（TorchDynamo）</p>
-<p> 捕获PyTorch的eager模型，生成一个FX Graph（中间表示IR）</p>
-</li>
-<li><p>图优化与分区（AOTAutograd + Decompositions）</p>
-<p> 对FX Graph进行算子分解（decomposition）、分区（partition）等预处理。</p>
-</li>
-<li><p>后端Lowering（Inductor）</p>
-<p> Inductor接受FX Graph，将算子Lowering成调度后语义（Schedulers）。</p>
-<p> 部分算子会映射到Triton-compatible kernels, 由Inductor创建出表示Triton的kernel源码（字符串）</p>
-</li>
-<li><p>Triton编译器调用</p>
-<p> 对于这些Triton kernel源码（通常是Python函数字符串），Triton编译器执行：</p>
-<pre><code> AST（抽象语法树）分析：将kernel函数代码解析为AST。
- 语义检查与IR构造：建立Triton的中间表示（SSA IR）。
- 后端代码生成：转成GPU可执行代码，比如PTX（NVIDIA）。
-</code></pre>
-</li>
+        <h1 id="pdb-debug工具"><a href="#pdb-debug工具" class="headerlink" title="pdb debug工具"></a>pdb debug工具</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>pdb是Python内置的交互式源代码调试器，提供了设置断点、单步执行、查看堆栈帧、检查变量等功能，帮助开发者有效地调试代码。</p>
+<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><ol>
+<li>在代码中设置断点</li>
 </ol>
-<h2 id="torch-compile-常用-Backend-整理（PyTorch-2-x-）"><a href="#torch-compile-常用-Backend-整理（PyTorch-2-x-）" class="headerlink" title="torch.compile 常用 Backend 整理（PyTorch 2.x+）"></a><code>torch.compile</code> 常用 Backend 整理（PyTorch 2.x+）</h2><h3 id="🧠-Backend-一览表"><a href="#🧠-Backend-一览表" class="headerlink" title="🧠 Backend 一览表"></a>🧠 Backend 一览表</h3><table>
-<thead>
-<tr>
-<th>Backend 名称</th>
-<th>描述&#x2F;特点</th>
-<th>是否默认</th>
-<th>适用场景&#x2F;建议</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>&quot;inductor&quot;</code></td>
-<td>⚙️ 默认 backend，基于 Triton 和 C++，性能好、支持广泛</td>
-<td>✅ 默认</td>
-<td>推荐首选，支持大部分算子，适用于通用加速优化</td>
-</tr>
-<tr>
-<td><code>&quot;eager&quot;</code></td>
-<td>PyTorch 原生模式，不做编译优化</td>
-<td>❌</td>
-<td>✅ Debug 模式；模型不支持编译、想跳过加速或便于排查</td>
-</tr>
-<tr>
-<td><code>&quot;aot_eager&quot;</code></td>
-<td>AOT Autograd + Eager，开启 trace 但不做 Inductor 优化</td>
-<td>❌</td>
-<td>Debug 早期图 trace 问题；不编译后端，只记录图结构</td>
-</tr>
-<tr>
-<td><code>&quot;nvfuser&quot;</code></td>
-<td>早期 Fusion backend，面向 CUDA（正在逐步弃用）</td>
-<td>❌</td>
-<td>CUDA 模型上实验使用，不推荐新项目使用</td>
-</tr>
-<tr>
-<td><code>&quot;aot_ts_nvfuser&quot;</code></td>
-<td>TorchScript + NVFuser（图优化 + Fusion）</td>
-<td>❌</td>
-<td>适用于 TorchScript 路径；性能不一定稳定</td>
-</tr>
-<tr>
-<td><code>&quot;aot_torchxla_traced&quot;</code></td>
-<td>用于 XLA（TPU）后端，例如在 Google Cloud TPU 上</td>
-<td>❌</td>
-<td>TPU 训练任务必须使用</td>
-</tr>
-<tr>
-<td><code>&quot;aot_torchxla&quot;</code></td>
-<td>同上，非 traced 版本</td>
-<td>❌</td>
-<td>更可控但 trace 不完整，实验可用</td>
-</tr>
-<tr>
-<td><code>&quot;ipex&quot;</code></td>
-<td>Intel Extension for PyTorch，适用于 Intel CPU&#x2F;GPU</td>
-<td>❌</td>
-<td>在 Intel 平台上推荐使用（x86 CPU 加速明显）</td>
-</tr>
-<tr>
-<td><code>&quot;openxla&quot;</code> &#x2F; <code>&quot;inductor_openxla&quot;</code></td>
-<td>为 OpenXLA 项目构建的 backend，主要用于部署</td>
-<td>❌</td>
-<td>高性能部署场景，开发者可试试 OpenXLA 编译路径（还不太成熟）</td>
-</tr>
-</tbody></table>
-<h3 id="✅-常用配置示例"><a href="#✅-常用配置示例" class="headerlink" title="✅ 常用配置示例"></a>✅ 常用配置示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认使用 inductor</span></span><br><span class="line">opt_model = torch.<span class="built_in">compile</span>(model)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用指定 backend</span></span><br><span class="line">opt_model = torch.<span class="built_in">compile</span>(model, backend=<span class="string">&quot;aot_eager&quot;</span>)  <span class="comment"># 或 &quot;eager&quot; / &quot;ipex&quot; 等</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Debug 编译失败时用 fallback</span></span><br><span class="line">torch._dynamo.config.suppress_errors = <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>在需要调试的代码位置插入以下代码行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import pdb</span><br><span class="line">pdb.set_trace()</span><br></pre></td></tr></table></figure>
 
-<h3 id="🔍-调试建议"><a href="#🔍-调试建议" class="headerlink" title="🔍 调试建议"></a>🔍 调试建议</h3><table>
-<thead>
-<tr>
-<th>需求</th>
-<th>推荐做法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>想知道是哪个算子不支持</td>
-<td>设置 <code>TORCH_LOGS=&quot;+dynamo&quot;</code>，或 <code>TORCHDYNAMO_VERBOSE=1</code></td>
-</tr>
-<tr>
-<td>想 dump 编译图</td>
-<td><code>torch._dynamo.export(model, inputs)</code></td>
-</tr>
-<tr>
-<td>想强制 fallback 到 eager</td>
-<td>使用 backend&#x3D;”eager”，或开启 suppress_errors</td>
-</tr>
-<tr>
-<td>编译 crash，但想继续跑</td>
-<td><code>torch._dynamo.config.suppress_errors = True</code></td>
-</tr>
-<tr>
-<td>想 benchmark 对比</td>
-<td>运行多次 warmup 后手动计时</td>
-</tr>
-</tbody></table>
-<hr>
-<h3 id="🚨-fallback-到-eager-有何区别？"><a href="#🚨-fallback-到-eager-有何区别？" class="headerlink" title="🚨 fallback 到 eager 有何区别？"></a>🚨 fallback 到 <code>eager</code> 有何区别？</h3><p>当 <code>torch.compile()</code> 编译失败时（如 GPU 类型不支持），会 fallback 到 <code>eager</code>，这时：</p>
-<ul>
-<li>模型依然是用 <code>model_opt = torch.compile(model)</code> 生成的；</li>
-<li>实际执行会自动使用原始 Python 模型，不再启用编译加速；</li>
-<li>与直接运行 <code>model(x)</code> 无本质区别，仅多一层包装；</li>
-<li>可以通过 <code>torch._dynamo.config.suppress_errors = True</code> 开启 fallback。</li>
+<ol start="2">
+<li>使用内置的breakpoint()函数（适用于Python3.7及以上版本）</li>
+</ol>
+<p>从Python3.7开始，可以使用内置的breakpoint()函数代替上述方法，当程序执行到breakpoint()时，会暂停并进入调试模式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def double(x):</span><br><span class="line">    breakpoint()</span><br><span class="line">    <span class="built_in">return</span> x * 2</span><br><span class="line"></span><br><span class="line">val = 3</span><br><span class="line"><span class="built_in">print</span>(f<span class="string">&quot;&#123;val&#125; * 2 is &#123;double(val)&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>从命令行直接运行脚本并进入调试模式</li>
+</ol>
+<p>可以在运行Python脚本时通过命令行参数直接启动调试器，这将以调试模式启动脚本，程序会在第一行代码处暂停。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m pdb your_script.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="常用调试命令"><a href="#常用调试命令" class="headerlink" title="常用调试命令"></a>常用调试命令</h2><ul>
+<li><p>l (list)：显示当前代码行及其上下文。</p>
+</li>
+<li><p>n (next)：执行下一行代码。</p>
+</li>
+<li><p>s (step)：进入函数内部。</p>
+</li>
+<li><p>c (continue)：继续执行程序直到遇到下一个断点。</p>
+</li>
+<li><p>p (print)：打印变量的值，例如 p variable_name。</p>
+</li>
+<li><p>q (quit)：退出调试器。</p>
+</li>
 </ul>
-<hr>
-<h3 id="🧪-如何查看当前后端是否启用成功？"><a href="#🧪-如何查看当前后端是否启用成功？" class="headerlink" title="🧪 如何查看当前后端是否启用成功？"></a>🧪 如何查看当前后端是否启用成功？</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch._dynamo</span><br><span class="line"><span class="built_in">print</span>(torch._dynamo.explain(model, args))  <span class="comment"># 分析编译情况</span></span><br></pre></td></tr></table></figure>
-
-<p>或设置环境变量调试：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> TORCH_LOGS=<span class="string">&quot;+dynamo&quot;</span>     <span class="comment"># 显示编译日志</span></span><br><span class="line"><span class="built_in">export</span> TORCHDYNAMO_VERBOSE=1    <span class="comment"># 显示更多 debug 信息</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="🧩-注册自定义-backend-示例（以-MUSA-为例）："><a href="#🧩-注册自定义-backend-示例（以-MUSA-为例）：" class="headerlink" title="🧩 注册自定义 backend 示例（以 MUSA 为例）："></a>🧩 注册自定义 backend 示例（以 MUSA 为例）：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">musa_backend</span>(<span class="params">gm, example_inputs</span>):</span><br><span class="line">    <span class="comment"># 替代 torch._inductor.compile_fx 的逻辑</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> compiled_fn</span><br><span class="line"></span><br><span class="line">torch._dynamo.optimizations.backends.register_backend(<span class="string">&quot;musa_inductor&quot;</span>, musa_backend)</span><br><span class="line"></span><br><span class="line">opt_model = torch.<span class="built_in">compile</span>(model, backend=<span class="string">&quot;musa_inductor&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<hr>
 
     </div>
 
@@ -423,7 +324,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://yoursite.com/2025/05/27/torch-compile/" title="torch compile">http://yoursite.com/2025/05/27/torch-compile/</a>
+    <a href="http://yoursite.com/2025/05/27/pdb-debug/" title="pdb debug">http://yoursite.com/2025/05/27/pdb-debug/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -440,13 +341,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2025/05/27/GPU-Performance/" rel="prev" title="GPU Performance">
-      <i class="fa fa-chevron-left"></i> GPU Performance
+    <a href="/2025/05/27/torch-compile/" rel="prev" title="torch compile">
+      <i class="fa fa-chevron-left"></i> torch compile
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2025/05/27/pdb-debug/" rel="next" title="pdb debug">
-      pdb debug <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -506,7 +404,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-compile-%E7%9A%84%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">torch.compile 的编译流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">整体编译流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-compile-%E5%B8%B8%E7%94%A8-Backend-%E6%95%B4%E7%90%86%EF%BC%88PyTorch-2-x-%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">torch.compile 常用 Backend 整理（PyTorch 2.x+）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%A0-Backend-%E4%B8%80%E8%A7%88%E8%A1%A8"><span class="nav-number">2.1.</span> <span class="nav-text">🧠 Backend 一览表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.2.</span> <span class="nav-text">✅ 常用配置示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%8D-%E8%B0%83%E8%AF%95%E5%BB%BA%E8%AE%AE"><span class="nav-number">2.3.</span> <span class="nav-text">🔍 调试建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%9A%A8-fallback-%E5%88%B0-eager-%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">🚨 fallback 到 eager 有何区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%AA-%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E5%90%8E%E7%AB%AF%E6%98%AF%E5%90%A6%E5%90%AF%E7%94%A8%E6%88%90%E5%8A%9F%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">🧪 如何查看当前后端是否启用成功？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%A9-%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89-backend-%E7%A4%BA%E4%BE%8B%EF%BC%88%E4%BB%A5-MUSA-%E4%B8%BA%E4%BE%8B%EF%BC%89%EF%BC%9A"><span class="nav-number">2.6.</span> <span class="nav-text">🧩 注册自定义 backend 示例（以 MUSA 为例）：</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pdb-debug%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">pdb debug工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E8%B0%83%E8%AF%95%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">常用调试命令</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -729,7 +627,7 @@ if (document.querySelectorAll('pre.mermaid').length) {
       quicklink({
         timeout : 3000,
         priority: true,
-        ignores : [uri => uri.includes('#'),uri => uri === 'http://yoursite.com/2025/05/27/torch-compile/',]
+        ignores : [uri => uri.includes('#'),uri => uri === 'http://yoursite.com/2025/05/27/pdb-debug/',]
       });
       });
   </script>
