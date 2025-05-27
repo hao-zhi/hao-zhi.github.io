@@ -125,7 +125,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">15</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">16</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -192,6 +192,207 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2025/05/27/profiler-tensorboard/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/coder2.jpg">
+      <meta itemprop="name" content="郝智">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao Zhi">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/27/profiler-tensorboard/" class="post-title-link" itemprop="url">profiler tensorboard</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-05-27 16:40:13 / 修改时间：16:40:25" itemprop="dateCreated datePublished" datetime="2025-05-27T16:40:13+08:00">2025-05-27</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2025/05/27/profiler-tensorboard/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/05/27/profiler-tensorboard/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="tensorboard"><a href="#tensorboard" class="headerlink" title="tensorboard"></a>tensorboard</h1><p>参考链接：</p>
+<p>TensorFlow TensorBoard:</p>
+<p><a target="_blank" rel="noopener" href="https://www.tensorflow.org/tensorboard?hl=zh-cn">https://www.tensorflow.org/tensorboard?hl=zh-cn</a></p>
+<p>知乎：</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/471198169">https://zhuanlan.zhihu.com/p/471198169</a></p>
+<h2 id="在PyTorch中使用TensorBoard"><a href="#在PyTorch中使用TensorBoard" class="headerlink" title="在PyTorch中使用TensorBoard"></a>在PyTorch中使用TensorBoard</h2><p>from torch.utils.tensorboard import SummaryWriter</p>
+<p>SummaryWriter类将PyTorch模型和指标记录到文件夹中</p>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html">https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html</a></p>
+<h2 id="安装TensorBoard"><a href="#安装TensorBoard" class="headerlink" title="安装TensorBoard"></a>安装TensorBoard</h2><p>将runs文件夹的log数据可视化需要安装tensorboard</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install tensorboard</span><br><span class="line">tensorboard --logdir=runs</span><br></pre></td></tr></table></figure>
+
+<h2 id="torch-utils-tensorboard"><a href="#torch-utils-tensorboard" class="headerlink" title="torch.utils.tensorboard"></a>torch.utils.tensorboard</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/tensorboard.html">https://pytorch.org/docs/stable/tensorboard.html</a></p>
+<ul>
+<li><p>scalar</p>
+</li>
+<li><p>scalars</p>
+</li>
+<li><p>histogram</p>
+</li>
+<li><p>image</p>
+</li>
+<li><p>images</p>
+</li>
+<li><p>figure</p>
+</li>
+<li><p>video</p>
+</li>
+<li><p>audio</p>
+</li>
+<li><p>text</p>
+</li>
+<li><p>graph</p>
+</li>
+<li><p>embedding</p>
+</li>
+<li><p>pr_curve</p>
+</li>
+<li><p>custom_scalars</p>
+</li>
+<li><p>mesh</p>
+</li>
+<li><p>hparams</p>
+</li>
+</ul>
+<h2 id="用TensorBoard可视化模型、数据和训练的demo"><a href="#用TensorBoard可视化模型、数据和训练的demo" class="headerlink" title="用TensorBoard可视化模型、数据和训练的demo"></a>用TensorBoard可视化模型、数据和训练的demo</h2><p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/intermediate/tensorboard_tutorial.html">https://pytorch.org/tutorials/intermediate/tensorboard_tutorial.html</a></p>
+<h2 id="torch-profiler"><a href="#torch-profiler" class="headerlink" title="torch.profiler"></a>torch.profiler</h2><p>作用：在训练和推理期间收集性能指标。profiler的上下文管理器API可用于更好地了解哪些模型运算符的成本更高，检查它们的输入形状和堆栈跟踪，研究设备内核活动并可视化执行跟踪。</p>
+<p>将tensorboard插件与PyTorch Profiler结合使用，以检测模型的性能瓶颈：</p>
+<p><a target="_blank" rel="noopener" href="https://pytorch.ac.cn/tutorials/intermediate/tensorboard_profiler_tutorial.html">https://pytorch.ac.cn/tutorials/intermediate/tensorboard_profiler_tutorial.html</a></p>
+<ol>
+<li><p>准备数据和模型</p>
+</li>
+<li><p>使用性能分析器记录执行事件</p>
+</li>
+<li><p>运行性能分析器</p>
+</li>
+<li><p>使用TensorBoard查看结果并分析模型性能</p>
+</li>
+<li><p>在性能分析器的帮助下提高性能</p>
+</li>
+<li><p>使用其他高级功能分析性能</p>
+</li>
+<li><p>实践：在musa设备上分析PyTorch性能</p>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html">PyTorch Profiler — PyTorch Tutorials 2.5.0+cu124 documentation</a></p>
+<p>用于分析PyTorch程序的性能，帮助开者深入了解模型的运行情况，以便进行优化。它能够捕捉和记录PyTorch程序在训练和推理时的各项性能指标，包括时间消耗、内存使用、各个操作的执行情况等，帮助找出瓶颈并进行优化。</p>
+<h2 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h2><h3 id="GPU-利用率"><a href="#GPU-利用率" class="headerlink" title="GPU 利用率"></a>GPU 利用率</h3><p>GPU繁忙时间与所有步骤时间的比值，越高越好。所有步骤时间是所有分析器步骤的总时间。GPU繁忙时间是“所有步骤时间”期间至少有一个GPU内核在此GPU上运行的时间。但是，这种高级利用率指标是粗略的。它无法告诉有多少SM正在使用中。例如，一个单线程连续运行的内核将获得100%的GPU利用率。</p>
+<h3 id="估计SM效率"><a href="#估计SM效率" class="headerlink" title="估计SM效率"></a>估计SM效率</h3><p>估计的流多处理器效率。越高越好。内核的这个指标，SM_Eff_K&#x3D;min(此内核的块&#x2F;此GPU的SM数量，100%)。这个总体数字是所有内核的SM_Eff_K的总和，按内核的执行持续时间加权，除以“所有步骤时间”。它显示了GPU流多处理器的利用率。虽然它比GPU利用率更细粒度，但它仍然不能说明全部情况。例如，每个块只有一个线程的内核无法充分利用每个SM。</p>
+<h3 id="估计实现占用率"><a href="#估计实现占用率" class="headerlink" title="估计实现占用率"></a>估计实现占用率</h3><p>对于大多数情况，例如内存带宽受限的内核，更高的值通常意味着更好的性能，特别是当初始值非常低时。占用率的定义（占用率是SM上的活动warp与SM支持的最大活动warp数之比）。内核的理论占用率是此内核的上限占用率，受内核形状，内核使用的资源和GPU计算能力等多种因素限制。内核的估计实现占用率OCC_K&#x3D;min(内核的线程数&#x2F;SM数&#x2F;每个SM的最大线程数，内核的理论占用率），这个总体数字是使用内核的执行持续时间作为权重的所有OCC_K的加权总和。它显示了细粒度的低级GPU利用率。</p>
+<h3 id="使用Tensor-Cores的内核时间"><a href="#使用Tensor-Cores的内核时间" class="headerlink" title="使用Tensor Cores的内核时间"></a>使用Tensor Cores的内核时间</h3><p>Tensor Core内核的总GPU时间&#x2F;所有内核的总GPU时间。值越高越好。Tensor Cores是可用于Volta GPU以及跟高版本的混合精度浮点运算。cuDNN和cuBLAS库包含多个启用Tensor Cores的GPU内核，可用于大多数卷积和GEMM操作。此数字显示GPU上所有内核中的Tensor Cores使用时间比率。</p>
+<h3 id="num-of-workers"><a href="#num-of-workers" class="headerlink" title="num of workers"></a>num of workers</h3><p>指在数据加载过程中用于并行加载数据的工作线程数量。它与PyTorch的DataLoader相关，DataLoader是负责将数据集分成小批量，并将这些批量加载到模型中的。num_workers参数指定了加载数据时使用多少个子进程来并行处理数据。有助于加速数据加载的速度，尤其是在数据集较大且需要进行大量预处理时。</p>
+<p>在TensorBoard中查看时，num of workers反映的是训练过程中数据加载部分使用的并行度（即多少个动作线程被用来加载数据）。这个指标有助于了解数据加载的效率和瓶颈，尤其是在数据加载时间较长，是否可以通过增加num_workers来加速。</p>
+<h2 id="启动tensorboard"><a href="#启动tensorboard" class="headerlink" title="启动tensorboard"></a>启动tensorboard</h2><ol>
+<li><p>tensorboard –logdir&#x3D;.&#x2F;log，网页打开<a target="_blank" rel="noopener" href="http://localhost:6006/">http://localhost:6006/</a></p>
+</li>
+<li><p>TensorBoard 只会在 <code>localhost</code>（即本机）上监听，其他机器无法访问。如果你希望从其他设备访问，需确保它绑定到所有网络接口。</p>
+</li>
+</ol>
+<p>通过添加 <code>--bind_all</code> 参数来使其监听所有接口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir=./log --bind_all</span><br></pre></td></tr></table></figure>
+
+<p>打开网址：http:&#x2F;&#x2F;&lt;机器的IP地址&gt;:6006&#x2F;</p>
+<h2 id="查看tensorboard的进程"><a href="#查看tensorboard的进程" class="headerlink" title="查看tensorboard的进程"></a>查看tensorboard的进程</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep tensorboard</span><br><span class="line"><span class="built_in">kill</span> -9 PID</span><br></pre></td></tr></table></figure>
+
+<h2 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h2><ol>
+<li>TensorBoard正常启动，浏览器加载卡住</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir=runs --port 6688</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/mxPOGQW4LX19nKa9/img/eca37d4e-c26c-4b65-8f2f-2d2ff94d1520.png" alt="image.png"></p>
+<p>检查vscode的转发端口，清理不使用的端口转发项，为tensorboard设置一个新的端口。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_32500247/article/details/140145323">https://blog.csdn.net/baidu_32500247&#x2F;article&#x2F;details&#x2F;140145323</a></p>
+<ol start="2">
+<li>vscode中集成tensorboard</li>
+</ol>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/python/python-in-visual-studio-code-february-2021-release/#tensorboard-integration">https://devblogs.microsoft.com/python/python-in-visual-studio-code-february-2021-release/#tensorboard-integration</a></p>
+<ol start="3">
+<li>trace视图无法正常工作，不显示任何内容</li>
+</ol>
+<ul>
+<li><p>将远程服务器中的log文件scp到本地windows系统</p>
+</li>
+<li><p>在Chrome浏览器中输入chrome:&#x2F;&#x2F;tracing</p>
+</li>
+<li><p>点击load，加载JSON文件</p>
+</li>
+</ul>
+<ol>
+<li>DataLoader的Time Duration为0</li>
+</ol>
+<p>推测是计算到了CPU Exec中，没有被显示地单独统计，因为数据加载的操作大部分是由CPU完成的。此外，数据加载过程非常短，低于最小的时间阈值，也会导致这个结果。</p>
+<p><img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/mxPOGQW4LX19nKa9/img/5f41499e-b565-4ced-b58a-a7c0c7650285.png" alt="image.png"></p>
+<p><img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/mxPOGQW4LX19nKa9/img/93ad9bf8-b13b-45d4-bf07-883bf3da7ef3.png" alt="image.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1640,101 +1841,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/09/25/matlab-check-platform/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/coder2.jpg">
-      <meta itemprop="name" content="郝智">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hao Zhi">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/25/matlab-check-platform/" class="post-title-link" itemprop="url">matlab_check_platform</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-25 16:21:34" itemprop="dateCreated datePublished" datetime="2023-09-25T16:21:34+08:00">2023-09-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-08 10:55:40" itemprop="dateModified" datetime="2025-03-08T10:55:40+08:00">2025-03-08</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2023/09/25/matlab-check-platform/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2023/09/25/matlab-check-platform/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>182</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="matlab中查看当前运行平台的方法"><a href="#matlab中查看当前运行平台的方法" class="headerlink" title="matlab中查看当前运行平台的方法"></a>matlab中查看当前运行平台的方法</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ismac()</span><br><span class="line">    <span class="comment">% Code to run on Mac platform</span></span><br><span class="line"><span class="keyword">elseif</span> isunix()</span><br><span class="line">    <span class="comment">% Code to run on Linux platform</span></span><br><span class="line"><span class="keyword">elseif</span> ispc()</span><br><span class="line">    <span class="comment">% Code to run on Windows platform</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">disp</span>(<span class="string">&#x27;Platform not supported&#x27;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      
-
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1806,7 +1912,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1839,6 +1945,9 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
+          <a href="/2025/05/27/profiler-tensorboard/" title="2025&#x2F;05&#x2F;27&#x2F;profiler-tensorboard&#x2F;">profiler tensorboard</a>
+        </li>
+        <li class="links-of-recent-posts-item">
           <a href="/2025/05/27/pdb-debug/" title="2025&#x2F;05&#x2F;27&#x2F;pdb-debug&#x2F;">pdb debug</a>
         </li>
         <li class="links-of-recent-posts-item">
@@ -1849,9 +1958,6 @@
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/2025/03/10/tmux/" title="2025&#x2F;03&#x2F;10&#x2F;tmux&#x2F;">tmux</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/2025/03/08/docker/" title="2025&#x2F;03&#x2F;08&#x2F;docker&#x2F;">docker</a>
         </li>
     </ul>
   </div>
@@ -1889,13 +1995,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">21k</span>
+    <span title="站点总字数">24k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">19 分钟</span>
+    <span title="站点阅读时长">22 分钟</span>
 </div>
 
 <!-- 网站运行时间的设置 -->
