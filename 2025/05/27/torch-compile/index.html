@@ -28,7 +28,7 @@
 <meta property="og:description" content="torch.compile 的编译流程PyTorch + Inductor + Triton的整个编译流程，特别是triton kernel生成与编译分析这部分的过程。 整体编译流程 前端捕获（TorchDynamo）  捕获PyTorch的eager模型，生成一个FX Graph（中间表示IR）  图优化与分区（AOTAutograd + Decompositions）  对FX Graph进行">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-27T08:19:48.000Z">
-<meta property="article:modified_time" content="2025-05-27T08:20:18.446Z">
+<meta property="article:modified_time" content="2025-06-05T08:13:57.524Z">
 <meta property="article:author" content="郝智">
 <meta name="twitter:card" content="summary">
 
@@ -223,10 +223,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-05-27 16:19:48 / 修改时间：16:20:18" itemprop="dateCreated datePublished" datetime="2025-05-27T16:19:48+08:00">2025-05-27</time>
+              <time title="创建时间：2025-05-27 16:19:48" itemprop="dateCreated datePublished" datetime="2025-05-27T16:19:48+08:00">2025-05-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-06-05 16:13:57" itemprop="dateModified" datetime="2025-06-05T16:13:57+08:00">2025-06-05</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -255,14 +261,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.5k</span>
+              <span>2.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -406,6 +412,7 @@
 <h3 id="🧩-注册自定义-backend-示例（以-MUSA-为例）："><a href="#🧩-注册自定义-backend-示例（以-MUSA-为例）：" class="headerlink" title="🧩 注册自定义 backend 示例（以 MUSA 为例）："></a>🧩 注册自定义 backend 示例（以 MUSA 为例）：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">musa_backend</span>(<span class="params">gm, example_inputs</span>):</span><br><span class="line">    <span class="comment"># 替代 torch._inductor.compile_fx 的逻辑</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> compiled_fn</span><br><span class="line"></span><br><span class="line">torch._dynamo.optimizations.backends.register_backend(<span class="string">&quot;musa_inductor&quot;</span>, musa_backend)</span><br><span class="line"></span><br><span class="line">opt_model = torch.<span class="built_in">compile</span>(model, backend=<span class="string">&quot;musa_inductor&quot;</span>)</span><br></pre></td></tr></table></figure>
 
 <hr>
+<h2 id="torch-compile特性参考链接"><a href="#torch-compile特性参考链接" class="headerlink" title="torch.compile特性参考链接"></a>torch.compile特性参考链接</h2><p><a target="_blank" rel="noopener" href="https://docs.pytorch.org/tutorials/intermediate/torch_compile_tutorial.html#torchdynamo-and-fx-graphs">https://docs.pytorch.org/tutorials/intermediate/torch_compile_tutorial.html#torchdynamo-and-fx-graphs</a><br><a target="_blank" rel="noopener" href="https://pytorch.org/blog/pytorch2-2/">https://pytorch.org/blog/pytorch2-2/</a><br><a target="_blank" rel="noopener" href="https://pytorch.ac.cn/tutorials/recipes/compiling_optimizer.html">https://pytorch.ac.cn/tutorials/recipes/compiling_optimizer.html</a><br><a target="_blank" rel="noopener" href="https://pytorch.org/blog/pytorch2-3/">https://pytorch.org/blog/pytorch2-3/</a><br><a target="_blank" rel="noopener" href="https://pytorch.ac.cn/tutorials/recipes/torch_compile_user_defined_triton_kernel_tutorial.html">https://pytorch.ac.cn/tutorials/recipes/torch_compile_user_defined_triton_kernel_tutorial.html</a></p>
 
     </div>
 
@@ -506,7 +513,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-compile-%E7%9A%84%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">torch.compile 的编译流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">整体编译流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-compile-%E5%B8%B8%E7%94%A8-Backend-%E6%95%B4%E7%90%86%EF%BC%88PyTorch-2-x-%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">torch.compile 常用 Backend 整理（PyTorch 2.x+）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%A0-Backend-%E4%B8%80%E8%A7%88%E8%A1%A8"><span class="nav-number">2.1.</span> <span class="nav-text">🧠 Backend 一览表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.2.</span> <span class="nav-text">✅ 常用配置示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%8D-%E8%B0%83%E8%AF%95%E5%BB%BA%E8%AE%AE"><span class="nav-number">2.3.</span> <span class="nav-text">🔍 调试建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%9A%A8-fallback-%E5%88%B0-eager-%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">🚨 fallback 到 eager 有何区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%AA-%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E5%90%8E%E7%AB%AF%E6%98%AF%E5%90%A6%E5%90%AF%E7%94%A8%E6%88%90%E5%8A%9F%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">🧪 如何查看当前后端是否启用成功？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%A9-%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89-backend-%E7%A4%BA%E4%BE%8B%EF%BC%88%E4%BB%A5-MUSA-%E4%B8%BA%E4%BE%8B%EF%BC%89%EF%BC%9A"><span class="nav-number">2.6.</span> <span class="nav-text">🧩 注册自定义 backend 示例（以 MUSA 为例）：</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-compile-%E7%9A%84%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">torch.compile 的编译流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">整体编译流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-compile-%E5%B8%B8%E7%94%A8-Backend-%E6%95%B4%E7%90%86%EF%BC%88PyTorch-2-x-%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">torch.compile 常用 Backend 整理（PyTorch 2.x+）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%A0-Backend-%E4%B8%80%E8%A7%88%E8%A1%A8"><span class="nav-number">2.1.</span> <span class="nav-text">🧠 Backend 一览表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.2.</span> <span class="nav-text">✅ 常用配置示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%8D-%E8%B0%83%E8%AF%95%E5%BB%BA%E8%AE%AE"><span class="nav-number">2.3.</span> <span class="nav-text">🔍 调试建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%9A%A8-fallback-%E5%88%B0-eager-%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">🚨 fallback 到 eager 有何区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%AA-%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E5%90%8E%E7%AB%AF%E6%98%AF%E5%90%A6%E5%90%AF%E7%94%A8%E6%88%90%E5%8A%9F%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">🧪 如何查看当前后端是否启用成功？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A7%A9-%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89-backend-%E7%A4%BA%E4%BE%8B%EF%BC%88%E4%BB%A5-MUSA-%E4%B8%BA%E4%BE%8B%EF%BC%89%EF%BC%9A"><span class="nav-number">2.6.</span> <span class="nav-text">🧩 注册自定义 backend 示例（以 MUSA 为例）：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#torch-compile%E7%89%B9%E6%80%A7%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text">torch.compile特性参考链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -605,13 +612,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">24k</span>
+    <span title="站点总字数">25k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">22 分钟</span>
+    <span title="站点阅读时长">23 分钟</span>
 </div>
 
 <!-- 网站运行时间的设置 -->
