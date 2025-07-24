@@ -125,7 +125,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">17</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">18</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -192,6 +192,387 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2025/07/24/llm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/coder2.jpg">
+      <meta itemprop="name" content="郝智">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao Zhi">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/07/24/llm/" class="post-title-link" itemprop="url">llm</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-07-24 11:34:13 / 修改时间：14:14:52" itemprop="dateCreated datePublished" datetime="2025-07-24T11:34:13+08:00">2025-07-24</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2025/07/24/llm/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/07/24/llm/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="大模型"><a href="#大模型" class="headerlink" title="大模型"></a>大模型</h2><ol>
+<li>指的是参数量极大（Billion+），模型本身显存和计算需求高  </li>
+<li>单卡放不下 &#x2F; 单机训练时间太长  </li>
+<li>必须用分布式训练手段才能完成  </li>
+<li>典型例子：LLaMA3-8B、70B，GPT-4，Gemini 等</li>
+</ol>
+<hr>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><h3 id="包括正向传播、反向传播、梯度更新"><a href="#包括正向传播、反向传播、梯度更新" class="headerlink" title="包括正向传播、反向传播、梯度更新"></a>包括正向传播、反向传播、梯度更新</h3><ul>
+<li><strong>前向传播</strong>：根据当前参数计算模型输出和损失  </li>
+<li><strong>反向传播</strong>：用链式法则从损失往回，层层计算出各个参数的梯度  </li>
+<li><strong>参数更新</strong>：根据计算出的梯度，更新参数</li>
+</ul>
+<h3 id="代码例子"><a href="#代码例子" class="headerlink" title="代码例子"></a>代码例子</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">optimizer.zero_grad()    <span class="comment"># 1. 清空上次的梯度</span></span><br><span class="line">output = model(<span class="built_in">input</span>)    <span class="comment"># 2. 前向传播</span></span><br><span class="line">loss = loss_fn(output, target)  <span class="comment"># 3. 计算损失</span></span><br><span class="line">loss.backward()          <span class="comment"># 4. 反向传播，计算梯度</span></span><br><span class="line">optimizer.step()         <span class="comment"># 5. 更新参数</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="计算例子"><a href="#计算例子" class="headerlink" title="计算例子"></a>计算例子</h3><p>两层神经网络前向传播计算，反向传播链式法则计算，更新参数。</p>
+<ol>
+<li>损失计算、优化器管理、LR调度、checkpoint管理</li>
+<li>基础训练流程是通用的，跟模型大小无关</li>
+</ol>
+<h2 id="分布式训练"><a href="#分布式训练" class="headerlink" title="分布式训练"></a>分布式训练</h2><ul>
+<li>是为了解决大模型训练的计算 &#x2F; 存储瓶颈  </li>
+<li>拆分模型（TP）、拆分数据（DP）、拆分层（PP）、拆分状态（ZeRO &#x2F; FSDP）  </li>
+<li>需要分布式通信、同步、协调  </li>
+<li>涉及并行策略 + 启动工具 + 通信后端 + 容错机制</li>
+</ul>
+<h2 id="分布式训练关键参数说明"><a href="#分布式训练关键参数说明" class="headerlink" title="分布式训练关键参数说明"></a>分布式训练关键参数说明</h2><ol>
+<li><p><strong>WORLD_SIZE</strong><br>总 GPU 数量，表示整个训练中参与的 GPU 数量。</p>
+</li>
+<li><p><strong>TP_SIZE</strong>（Tensor Parallel Size）<br>Tensor 并行度：将单层模型的巨大参数拆分成多份，每个 GPU 计算一部分，多个 GPU 协作完成该层的前后向计算。  </p>
+<ul>
+<li>减小单 GPU 显存压力  </li>
+<li>支持更大模型</li>
+</ul>
+</li>
+<li><p><strong>PP_SIZE</strong>（Pipeline Parallel Size）<br>Pipeline 并行度：将模型的不同层划分为多个“段”，每个 GPU 负责其中一段的前向和反向传播。  </p>
+<ul>
+<li>进一步分摊显存  </li>
+<li>支持更深更大的模型结构</li>
+</ul>
+</li>
+<li><p><strong>DP_SIZE</strong>（Data Parallel Size）<br>数据并行度：经典的并行方式，每个 GPU 保持模型完整副本，处理不同的 batch 数据，并在每个 step 同步梯度。  </p>
+<ul>
+<li>DP_SIZE &#x3D; WORLD_SIZE &#x2F; (TP_SIZE × PP_SIZE)  </li>
+<li>表示一个模型并行组的数量，每组对应一个数据并行副本</li>
+</ul>
+</li>
+<li><p><strong>MICRO_BATCH_SIZE</strong><br>微批大小：指单次前向 + 反向的 batch 大小。多个微批连续执行，累计梯度后再更新一次参数。</p>
+</li>
+<li><p><strong>NUM_MICROBATCHES</strong><br>一个 step 内，在梯度累计前连续运行的微批次数量。</p>
+</li>
+<li><p><strong>GLOBAL_BATCH_SIZE</strong><br>全局批大小：一次参数更新时模型“整体”看到的样本数，是训练稳定性和模型效果的重要因素。大模型常用大 batch，有助于加速收敛。  </p>
+<ul>
+<li>GLOBAL_BATCH_SIZE &#x3D; DP_SIZE × NUM_MICROBATCHES × MICRO_BATCH_SIZE  </li>
+<li>相当于小模型中一个 step 的 batch_size，只不过这里是分布式场景中整组模型并行副本累计处理的总样本数</li>
+</ul>
+</li>
+</ol>
+<h2 id="torchrun-启动机制"><a href="#torchrun-启动机制" class="headerlink" title="torchrun 启动机制"></a>torchrun 启动机制</h2><p>用于启动多个分布式训练进程，配合 Megatron-LM 驱动大模型训练。</p>
+<ul>
+<li>自动为每个 GPU 启动一个 Python 进程（单机多卡）</li>
+<li>多节点时，协调每个节点与 master 建立通信</li>
+<li>初始化 <code>torch.distributed</code> 环境</li>
+<li>每个进程内使用 <code>torch.distributed.get_rank()</code> 获取全局 rank</li>
+<li>后续的 DDP、模型并行、AllReduce 等都依赖这个初始化</li>
+</ul>
+<h3 id="分布式常见参数说明"><a href="#分布式常见参数说明" class="headerlink" title="分布式常见参数说明"></a>分布式常见参数说明</h3><table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>world_size</code></td>
+<td>总进程数 &#x3D; <code>nnodes × nproc_per_node</code></td>
+</tr>
+<tr>
+<td><code>rank</code></td>
+<td>每个进程的全局编号（0 ~ world_size-1）</td>
+</tr>
+<tr>
+<td><code>local_rank</code></td>
+<td>每个节点内的进程编号（0 ~ nproc_per_node-1）</td>
+</tr>
+<tr>
+<td><code>master_addr</code> &amp; <code>master_port</code></td>
+<td>用于集群通信的协调节点</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="分布式通信机制"><a href="#分布式通信机制" class="headerlink" title="分布式通信机制"></a>分布式通信机制</h2><h3 id="基本通信原语（PyTorch-Distributed）"><a href="#基本通信原语（PyTorch-Distributed）" class="headerlink" title="基本通信原语（PyTorch Distributed）"></a>基本通信原语（PyTorch Distributed）</h3><ul>
+<li><strong>AllReduce</strong>：所有 GPU 的张量求和&#x2F;平均 → 同步梯度  </li>
+<li><strong>Broadcast</strong>：从 rank 0 广播数据到其他进程  </li>
+<li><strong>AllGather &#x2F; ReduceScatter</strong>：多张量收集与分发  </li>
+<li><strong>Barrier</strong>：全体进程阻塞同步，常用于初始化或 barrier 控制点</li>
+</ul>
+<h4 id="通信算子与应用场景"><a href="#通信算子与应用场景" class="headerlink" title="通信算子与应用场景"></a>通信算子与应用场景</h4><table>
+<thead>
+<tr>
+<th>通信算子</th>
+<th>作用描述</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AllReduce</td>
+<td>张量求和&#x2F;平均，同步到所有 GPU</td>
+<td>同步梯度（DDP）</td>
+</tr>
+<tr>
+<td>Broadcast</td>
+<td>从 rank 0 广播张量</td>
+<td>初始化模型参数</td>
+</tr>
+<tr>
+<td>AllGather</td>
+<td>所有进程张量拼接</td>
+<td>模型并行中拼接切片</td>
+</tr>
+<tr>
+<td>ReduceScatter</td>
+<td>先规约后切片</td>
+<td>张量并行中中间通信</td>
+</tr>
+<tr>
+<td>Barrier</td>
+<td>阻塞等待所有进程</td>
+<td>开始训练或加载 checkpoint</td>
+</tr>
+</tbody></table>
+<h3 id="通信分组（以-Megatron-LM-为例）"><a href="#通信分组（以-Megatron-LM-为例）" class="headerlink" title="通信分组（以 Megatron-LM 为例）"></a>通信分组（以 Megatron-LM 为例）</h3><ul>
+<li><strong>数据并行组</strong>：同步梯度  </li>
+<li><strong>张量并行组</strong>：分片权重计算中通信  </li>
+<li><strong>流水线并行组</strong>：跨 stage 的激活通信</li>
+</ul>
+<h3 id="通信后端"><a href="#通信后端" class="headerlink" title="通信后端"></a>通信后端</h3><table>
+<thead>
+<tr>
+<th>后端名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NCCL</td>
+<td>CUDA 最快，NVIDIA 优化，支持 NVLink &#x2F; PCIe &#x2F; IB</td>
+</tr>
+<tr>
+<td>MCCL</td>
+<td>MUSA 的通信后端（国产 GPU）</td>
+</tr>
+<tr>
+<td>Gloo</td>
+<td>通用后端，适用于 CPU、调试</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="NCCL-Ring-AllReduce-AllGather-ReduceScatter-原理简述"><a href="#NCCL-Ring-AllReduce-AllGather-ReduceScatter-原理简述" class="headerlink" title="NCCL Ring AllReduce &#x2F; AllGather &#x2F; ReduceScatter 原理简述"></a>NCCL Ring AllReduce &#x2F; AllGather &#x2F; ReduceScatter 原理简述</h2><ul>
+<li><strong>AllReduce</strong>：全卡归约并广播，分布式梯度同步的核心算子。</li>
+<li><strong>Ring AllReduce</strong>：将计算&#x2F;通信均匀分布到所有进程，无 master 瓶颈，通信效率高。</li>
+<li><strong>ReduceScatter</strong>：AllReduce 的前半部分，规约后切片分发。</li>
+<li><strong>AllGather</strong>：AllReduce 的后半部分，将切片拼接广播。</li>
+<li><strong>Broadcast &#x2F; Barrier</strong>：点对多点广播，全体同步阻塞。</li>
+</ul>
+<h3 id="通信模块的四个层次"><a href="#通信模块的四个层次" class="headerlink" title="通信模块的四个层次"></a>通信模块的四个层次</h3><ol>
+<li>通信原语（逻辑层）：AllReduce、Broadcast 等  </li>
+<li>通信库（软件层）：NCCL、MPI、Gloo  </li>
+<li>协议与驱动（接口层）：RDMA、TCP、驱动程序  </li>
+<li>真实硬件（物理层）：GPU、PCIe、NVLink、IB、交换机</li>
+</ol>
+<hr>
+<h2 id="分布式并行策略"><a href="#分布式并行策略" class="headerlink" title="分布式并行策略"></a>分布式并行策略</h2><h3 id="单机多卡策略"><a href="#单机多卡策略" class="headerlink" title="单机多卡策略"></a>单机多卡策略</h3><h4 id="数据并行（Data-Parallel）"><a href="#数据并行（Data-Parallel）" class="headerlink" title="数据并行（Data Parallel）"></a>数据并行（Data Parallel）</h4><ul>
+<li>每卡持有模型完整副本，分批处理不同输入，梯度通过 AllReduce 同步  </li>
+<li>✅ 简单易实现，支持成熟（如 PyTorch DDP）  </li>
+<li>❌ 模型必须单卡可容纳；AllReduce 开销随卡数上升</li>
+</ul>
+<h4 id="张量并行（Tensor-Parallel）"><a href="#张量并行（Tensor-Parallel）" class="headerlink" title="张量并行（Tensor Parallel）"></a>张量并行（Tensor Parallel）</h4><ul>
+<li>将某一层的参数（如矩阵）按维度切分，分卡并行计算  </li>
+<li>用于降低单卡显存  </li>
+<li>通信较频繁，需要 AllGather、ReduceScatter  </li>
+<li>应用：Megatron-LM 的 1D 分片</li>
+</ul>
+<h4 id="流水线并行（Pipeline-Parallel）"><a href="#流水线并行（Pipeline-Parallel）" class="headerlink" title="流水线并行（Pipeline Parallel）"></a>流水线并行（Pipeline Parallel）</h4><ul>
+<li>将模型划分成多个 Stage，多个微批次以流水线形式穿过各卡  </li>
+<li>优点：大幅降低激活显存占用  </li>
+<li>缺点：流水线填空&#x2F;排空带来利用率下降，通信复杂</li>
+</ul>
+<h4 id="混合并行（Hybrid）"><a href="#混合并行（Hybrid）" class="headerlink" title="混合并行（Hybrid）"></a>混合并行（Hybrid）</h4><ul>
+<li>常见为 2D 或 3D 并行：张量 + 流水线 + 数据并行组合  </li>
+<li>框架支持：Megatron-LM、DeepSpeed（3D Parallel）</li>
+</ul>
+<hr>
+<h3 id="多机多卡策略"><a href="#多机多卡策略" class="headerlink" title="多机多卡策略"></a>多机多卡策略</h3><h4 id="跨机数据并行"><a href="#跨机数据并行" class="headerlink" title="跨机数据并行"></a>跨机数据并行</h4><ul>
+<li>每机内部数据并行，节点间通过 NCCL 做梯度 AllReduce  </li>
+<li>关键：网络带宽、拓扑感知、NCCL 环境变量调优</li>
+</ul>
+<h4 id="跨机模型并行"><a href="#跨机模型并行" class="headerlink" title="跨机模型并行"></a>跨机模型并行</h4><ul>
+<li>张量并行 &#x2F; 流水线并行可跨机拓展  <ul>
+<li>跨机张量并行：tensor 切片分布于多机  </li>
+<li>跨机流水线并行：stage 可跨机部署  </li>
+<li>支持 3D &#x2F; 4D 混合并行（如 DeepSpeed）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="主流框架支持对比"><a href="#主流框架支持对比" class="headerlink" title="主流框架支持对比"></a>主流框架支持对比</h2><table>
+<thead>
+<tr>
+<th>技术 &#x2F; 框架</th>
+<th>支持的并行类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PyTorch DDP</td>
+<td>数据并行</td>
+<td>简单易用，入门推荐</td>
+</tr>
+<tr>
+<td>Megatron‑LM</td>
+<td>1D 张量 + 流水线 + 数据并行</td>
+<td>超大模型训练常用</td>
+</tr>
+<tr>
+<td>DeepSpeed</td>
+<td>ZeRO (1&#x2F;2&#x2F;3) + Tensor + Pipeline + Data</td>
+<td>支持上千亿参数</td>
+</tr>
+<tr>
+<td>FairScale</td>
+<td>FSDP + 张量并行</td>
+<td>PyPI 轻量包，适合实验</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="从单机到多机训练的推荐步骤"><a href="#从单机到多机训练的推荐步骤" class="headerlink" title="从单机到多机训练的推荐步骤"></a>从单机到多机训练的推荐步骤</h2><ol>
+<li><p><strong>单机开发调试</strong></p>
+<ul>
+<li>先用数据并行，确保代码正确</li>
+<li>用小模型 + 小 batch 验证显存&#x2F;性能</li>
+</ul>
+</li>
+<li><p><strong>加入模型并行</strong></p>
+<ul>
+<li>单卡显存不够 → 加入张量并行 &#x2F; 流水线并行</li>
+<li>加入激活检查点，节省显存</li>
+</ul>
+</li>
+<li><p><strong>扩展到多机</strong></p>
+<ul>
+<li>配置 NCCL、InfiniBand、确认 GPU 拓扑  </li>
+<li>设置 <code>init_process_group()</code></li>
+</ul>
+</li>
+<li><p><strong>性能调优</strong></p>
+<ul>
+<li>通信：调 NCCL 环境变量  </li>
+<li>流水线：设置 micro-batch 数量、stage 划分平衡通信  </li>
+<li>ZeRO：根据显存与带宽选 Stage1&#x2F;2&#x2F;3</li>
+</ul>
+</li>
+<li><p><strong>监控与 Profiling</strong></p>
+<ul>
+<li>显存：<code>torch.cuda.memory_summary()</code>  </li>
+<li>时间：<code>PyTorch Profiler</code>、<code>DeepSpeed Profiler</code>  </li>
+<li>通信：<code>nvidia-smi topo --matrix</code></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据并行</td>
+<td>入门首选，易扩展，显存限制</td>
+</tr>
+<tr>
+<td>模型并行</td>
+<td>张量 + 流水线，缓解显存压力，复杂度提升</td>
+</tr>
+<tr>
+<td>ZeRO</td>
+<td>拆分优化器&#x2F;梯度&#x2F;参数，占用最低显存</td>
+</tr>
+<tr>
+<td>混合并行</td>
+<td>超大模型训练主流，3D 组合策略</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1719,131 +2100,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/09/25/%E7%94%B5%E7%A3%81%E6%B3%A2%E6%A6%82%E5%BF%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/coder2.jpg">
-      <meta itemprop="name" content="郝智">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hao Zhi">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/25/%E7%94%B5%E7%A3%81%E6%B3%A2%E6%A6%82%E5%BF%B5/" class="post-title-link" itemprop="url">电磁波概念</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-25 17:11:34" itemprop="dateCreated datePublished" datetime="2023-09-25T17:11:34+08:00">2023-09-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-08 10:55:40" itemprop="dateModified" datetime="2025-03-08T10:55:40+08:00">2025-03-08</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2023/09/25/%E7%94%B5%E7%A3%81%E6%B3%A2%E6%A6%82%E5%BF%B5/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2023/09/25/%E7%94%B5%E7%A3%81%E6%B3%A2%E6%A6%82%E5%BF%B5/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>电磁波是一种由电场和磁场相互作用产生的波动现象。它是由振荡的电荷或电流在空间中传播而形成的无质量粒子——光子的传播方式。电磁波具有以下特性：</p>
-<ol>
-<li>频率和波长：电磁波的特征由其频率和波长确定。频率表示单位时间内波动的周期数，以赫兹（Hz）为单位；波长表示连续波峰之间的距离，以米为单位。电磁波的不同频率和波长对应不同的种类，包括无线电波、微波、红外线、可见光、紫外线、X射线和γ射线。</li>
-<li>传播速度：在真空中，电磁波的传播速度是恒定的，称为光速。光速约为每秒 3 × 10^8 米，常用符号 c 表示。光速是自然界中最快的速度，它在不同介质中会有略微变化。</li>
-<li>双重性质：电磁波既具有波动性，也具有粒子性。根据波粒二象性理论，电磁波可以看作是由光子组成的粒子流，这些光子具有能量和动量。</li>
-<li>干涉和衍射：电磁波表现出干涉和衍射现象。干涉是指两个或多个波相互叠加产生增强或抵消的现象，形成明暗相间的干涉图样。衍射是指波通过障碍物或穿过狭缝后发生弯曲和扩散的现象。</li>
-<li>吸收和透射：不同物质对电磁波的吸收和透射能力不同。某些物质对特定频率的电磁波有较高的吸收能力，而其他物质则对该频率的电磁波具有较高的透射能力。</li>
-</ol>
-<p>电磁波的应用广泛，涵盖了许多领域，包括但不限于：</p>
-<ol>
-<li>通信：电磁波是无线通信的基础，包括无线电、微波、卫星通信、移动通信等。</li>
-<li>医学影像：X射线、核磁共振（MRI）、超声波等电磁波用于医学影像和诊断。</li>
-<li>光学技术：可见光波段的电磁波被用于光学显微镜、激光技术、光纤通信、光传感器等。</li>
-<li>天文学：通过观测和分析电磁波，天文学家能够研究和了解宇宙中的天体和现象。</li>
-<li>辐射治疗和辐射检测：电磁波（如γ射线）被用于癌症治疗和辐射检测。</li>
-<li>无人机和雷达技术：微波和雷达技术使用电磁波进行目标探测、跟踪和测距。</li>
-</ol>
-<p>以上仅是电磁波的一些特性和应用领域的简要介绍，电磁波的研究和应用在许多其他领域中也具有重要作用</p>
-<h2 id="波长与频率"><a href="#波长与频率" class="headerlink" title="波长与频率"></a>波长与频率</h2><p>电磁波的波长和频率之间存在一个简单的关系，由光速（速度）来连接它们。这个关系可以由以下公式表示：</p>
-<p>c &#x3D; λν</p>
-<p>其中，</p>
-<ul>
-<li>c 是光速，即电磁波在真空中的传播速度，约等于 3 × 10^8 米&#x2F;秒。</li>
-<li>λ 是电磁波的波长，表示连续波峰之间的距离，以米为单位。</li>
-<li>ν 是电磁波的频率，表示单位时间内波动的周期数，以赫兹（Hz）为单位。</li>
-</ul>
-<p>这个公式说明了电磁波的波长和频率之间的倒数关系。具体而言，频率等于波速除以波长，或者波长等于波速除以频率。</p>
-<p>例如，对于可见光，它的波长范围大约在 400 纳米到 700 纳米之间。假设我们取其中的一个波长 λ &#x3D; 500 纳米，带入公式 c &#x3D; λν，可以求解频率 ν： c &#x3D; λν 3 × 10^8 &#x3D; (500 × 10^(-9)) × ν ν ≈ 6 × 10^14 Hz</p>
-<p>因此，对应波长为 500 纳米的可见光具有大约 6 × 10^14 赫兹的频率。</p>
-<p>这个关系表明，波长和频率是电磁波的基本属性，它们之间具有互相确定的关系。当波长增加时，频率减小；当波长减小时，频率增加。</p>
-<h2 id="相位"><a href="#相位" class="headerlink" title="相位"></a>相位</h2><p>相位（Phase）&#x3D; 距离 &#x2F; 波长 × 2π 其中， 距离是指电磁波传播的距离，通常以长度单位（如米）表示。 波长是电磁波的波长，表示一个完整波周期的长度，也以长度单位（如米）表示。 2π 是圆周率 π 的倍数，用来将相位从弧度单位转换为角度单位（弧度&#x3D;角度 × π &#x2F; 180）。 这个公式描述了电磁波传播中相位的变化。根据这个公式，当传播距离是波长的整数倍时，相位的变化是完整的周期（2π的倍数）；当传播距离是波长的一半时，相位的变化是半个周期（π的倍数）。 相位的概念在电磁波的分析和处理中非常重要，它决定了波的位置、波的形状以及与其他波的干涉和合成等现象。</p>
-
-      
-    </div>
-
-    
-    
-    
-      
-
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1915,7 +2171,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1948,6 +2204,9 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
+          <a href="/2025/07/24/llm/" title="2025&#x2F;07&#x2F;24&#x2F;llm&#x2F;">llm</a>
+        </li>
+        <li class="links-of-recent-posts-item">
           <a href="/2025/05/27/continer-ssh-server/" title="2025&#x2F;05&#x2F;27&#x2F;continer-ssh-server&#x2F;">continer ssh server</a>
         </li>
         <li class="links-of-recent-posts-item">
@@ -1958,9 +2217,6 @@
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/2025/05/27/torch-compile/" title="2025&#x2F;05&#x2F;27&#x2F;torch-compile&#x2F;">torch compile</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/2025/05/27/GPU-Performance/" title="2025&#x2F;05&#x2F;27&#x2F;GPU-Performance&#x2F;">GPU Performance</a>
         </li>
     </ul>
   </div>
@@ -1998,13 +2254,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">25k</span>
+    <span title="站点总字数">28k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">23 分钟</span>
+    <span title="站点阅读时长">26 分钟</span>
 </div>
 
 <!-- 网站运行时间的设置 -->
