@@ -125,7 +125,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">18</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -192,6 +192,105 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2025/10/28/processes-and-threads/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/coder2.jpg">
+      <meta itemprop="name" content="郝智">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao Zhi">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/10/28/processes-and-threads/" class="post-title-link" itemprop="url">processes and threads</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-10-28 10:43:31 / 修改时间：16:42:27" itemprop="dateCreated datePublished" datetime="2025-10-28T10:43:31+08:00">2025-10-28</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2025/10/28/processes-and-threads/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2025/10/28/processes-and-threads/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>520</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h1><p><strong>参考链接：<br><a target="_blank" rel="noopener" href="https://medium.com/@siwatponpued/process-and-thread-88822e83709">Process and Thread</a><br><a target="_blank" rel="noopener" href="https://medium.com/@siwatponpued/process-and-thread-88822e83709">https:&#x2F;&#x2F;medium.com&#x2F;@siwatponpued&#x2F;process-and-thread-88822e83709</a></strong></p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><ol>
+<li>进程是操作系统提供的对正在运行的程序的抽象。当编写一个程序时，程序本身只是一个存储在磁盘上的文件；当运行它时，操作系统会创建该程序的一个实例，也就是进程。  </li>
+<li>设备能同时运行许多进程是通过CPU虚拟化将CPU资源共享给所有进程的。CPU虚拟化的概念是营造一种存在多个CPU的假象，尽管实际上只有一个或几个。实现CPU虚拟化的方法很多，基本技术被称为CPU分时共享。进程被赋予一定的运行时间，达到指定时间后被停止，并由另一个进程运行。  </li>
+<li>进程有3种状态，运行状态、就绪状态与阻塞状态，进程控制块（PCB）用于跟踪每个进程的状态。</li>
+<li>进程间切换处理器必须保存一些当前状态，如寄存器状态、PC、堆栈指针等。</li>
+</ol>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><ol>
+<li>线程是进程内的执行单元，也称为轻量级进程。同一个进程下的线程拥有相同的地址空间，他们共享内存机器状态，彼此之间没有保护机制。</li>
+<li>线程有独立的寄存器和堆栈，用于管理特定于该线程的函数调用和局部变量。进程内的线程共享文本、数据和堆区域。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1998,108 +2097,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/09/25/matlab%E6%9F%A5%E7%9C%8B%E5%B7%A5%E7%A8%8B%E4%B8%AD%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/coder2.jpg">
-      <meta itemprop="name" content="郝智">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hao Zhi">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/25/matlab%E6%9F%A5%E7%9C%8B%E5%B7%A5%E7%A8%8B%E4%B8%AD%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">matlab查看工程中函数的调用关系</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-25 17:14:12" itemprop="dateCreated datePublished" datetime="2023-09-25T17:14:12+08:00">2023-09-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-03-08 10:55:40" itemprop="dateModified" datetime="2025-03-08T10:55:40+08:00">2025-03-08</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2023/09/25/matlab%E6%9F%A5%E7%9C%8B%E5%B7%A5%E7%A8%8B%E4%B8%AD%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2023/09/25/matlab%E6%9F%A5%E7%9C%8B%E5%B7%A5%E7%A8%8B%E4%B8%AD%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>431</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在 MATLAB 中，你可以使用 “Dependency Analysis”（依赖分析）工具来快速查看函数之间的调用关系。这个工具可以帮助你理解你的代码是如何相互连接的，特别是在大型项目中。</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>打开 MATLAB 并打开你的项目或代码文件。</li>
-<li>在 MATLAB 工具栏上选择 “Editor”（编辑器）标签。</li>
-<li>在编辑器中，打开你想要分析的主函数或代码文件。</li>
-<li>在编辑器中，右键单击函数名称，然后从弹出菜单中选择 “Show Dependencies”（显示依赖关系）。</li>
-</ol>
-<h2 id="依赖分析工具"><a href="#依赖分析工具" class="headerlink" title="依赖分析工具"></a>依赖分析工具</h2><p>依赖分析工具将在 MATLAB 窗口中显示函数的依赖关系图。这个图示表示了主函数和相关函数之间的调用关系，以及函数之间的依赖关系。<br>你可以在依赖分析工具中浏览不同函数之间的连接，单击节点以查看详细信息，包括调用图、输入和输出等。<br>请注意，依赖分析工具可以帮助你可视化函数之间的调用关系，但对于大型项目或复杂代码库，它可能会变得复杂。因此，在代码设计和编写时，良好的代码结构、注释和模块化可以更好地帮助你管理代码的调用关系。</p>
-
-      
-    </div>
-
-    
-    
-    
-      
-
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2171,7 +2168,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2204,6 +2201,9 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
+          <a href="/2025/10/28/processes-and-threads/" title="2025&#x2F;10&#x2F;28&#x2F;processes-and-threads&#x2F;">processes and threads</a>
+        </li>
+        <li class="links-of-recent-posts-item">
           <a href="/2025/07/24/llm/" title="2025&#x2F;07&#x2F;24&#x2F;llm&#x2F;">llm</a>
         </li>
         <li class="links-of-recent-posts-item">
@@ -2214,9 +2214,6 @@
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/2025/05/27/pdb-debug/" title="2025&#x2F;05&#x2F;27&#x2F;pdb-debug&#x2F;">pdb debug</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/2025/05/27/torch-compile/" title="2025&#x2F;05&#x2F;27&#x2F;torch-compile&#x2F;">torch compile</a>
         </li>
     </ul>
   </div>
@@ -2254,7 +2251,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">28k</span>
+    <span title="站点总字数">29k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
