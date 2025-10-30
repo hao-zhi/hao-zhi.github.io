@@ -125,7 +125,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">21</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">22</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -192,6 +192,120 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/09/25/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/coder2.jpg">
+      <meta itemprop="name" content="郝智">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hao Zhi">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/25/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" class="post-title-link" itemprop="url">傅里叶变换</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-25 10:48:27" itemprop="dateCreated datePublished" datetime="2023-09-25T10:48:27+08:00">2023-09-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-03-08 10:55:40" itemprop="dateModified" datetime="2025-03-08T10:55:40+08:00">2025-03-08</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2023/09/25/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/09/25/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>快速傅里叶变换（Fast Fourier Transform，FFT）</code>是一种高效计算离散傅里叶变换（Discrete Fourier Transform，DFT）的算法。它通过利用傅里叶变换的对称性和周期性，将计算复杂度从O(N^2)降低到O(N log N)，其中N是信号长度。</p>
+<p>傅里叶变换将一个信号（或序列）从时域转换到频域，它将信号分解为一系列正弦和余弦函数（频谱成分），表示每个频率成分的振幅和相位。DFT是计算离散信号的傅里叶变换，它将信号离散化为一系列离散采样点。</p>
+<p>FFT算法的核心思想是基于”分治法”，它将DFT的计算分解为一系列较小的DFT计算。它利用了傅里叶变换的周期性和对称性质，将一个长度为N的DFT分解为多个长度为N&#x2F;2的DFT，然后再将这些子问题分解为更小的子问题，以此类推，直到最终计算得到长度为1的DFT。</p>
+<h2 id="FFT算法的主要步骤"><a href="#FFT算法的主要步骤" class="headerlink" title="FFT算法的主要步骤"></a>FFT算法的主要步骤</h2><ol>
+<li>如果输入序列长度为1，则直接返回该值作为DFT结果。</li>
+<li>将输入序列分为偶数索引和奇数索引两个子序列。</li>
+<li>对这两个子序列分别进行递归的FFT计算，得到它们的DFT结果。</li>
+<li>利用DFT结果计算原始序列的DFT结果。这一步骤涉及到频域中的旋转因子（复数），用于将两个子序列的DFT结果结合起来得到原始序列的DFT结果。</li>
+<li>重复上述步骤，直到得到最终的DFT结果。</li>
+</ol>
+<p>FFT算法通过将问题分解为更小的子问题，有效地减少了计算量。它的关键在于计算复杂度为O(N log N)，相比直接计算DFT的O(N^2)大大降低了计算时间。因此，FFT广泛应用于信号处理、频谱分析、图像处理和许多其他领域。</p>
+<p>FFT算法的主要思想是通过将信号分解为多个子问题，利用傅里叶变换的性质减少计算量。其中最常用的是Cooley-Tukey算法，该算法使用了迭代的方式，将FFT问题分解为较小规模的子问题。</p>
+<h2 id="Cooley-Tukey算法的基本原理"><a href="#Cooley-Tukey算法的基本原理" class="headerlink" title="Cooley-Tukey算法的基本原理"></a>Cooley-Tukey算法的基本原理</h2><ol>
+<li>将输入信号分为偶数索引和奇数索引两个子序列。</li>
+<li>对子序列进行递归地进行FFT计算。</li>
+<li>计算旋转因子，通过乘以旋转因子将奇数索引子序列与偶数索引子序列合并。</li>
+<li>重复以上步骤，直到最后得到FFT结果。</li>
+</ol>
+<p>Cooley-Tukey算法利用了傅里叶变换的对称性和周期性，通过将问题分解为较小规模的子问题，大大减少了计算量。该算法的时间复杂度为O(NlogN)，比直接计算傅里叶变换的O(N^2)更高效。</p>
+<p>FFT算法在实际应用中具有广泛的应用，例如频谱分析、滤波、信号压缩等。它能够有效地处理大量数据，并提供了高精度和高效率的频域分析。</p>
+
+      
+    </div>
+
+    
+    
+    
+      
+
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -699,7 +813,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -732,6 +846,9 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
+          <a href="/2025/10/30/kernel-profiling-samples/" title="2025&#x2F;10&#x2F;30&#x2F;kernel-profiling-samples&#x2F;">kernel profiling samples</a>
+        </li>
+        <li class="links-of-recent-posts-item">
           <a href="/2025/10/30/Nsight-profiling/" title="2025&#x2F;10&#x2F;30&#x2F;Nsight-profiling&#x2F;">Nsight profiling</a>
         </li>
         <li class="links-of-recent-posts-item">
@@ -742,9 +859,6 @@
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/2025/07/24/llm/" title="2025&#x2F;07&#x2F;24&#x2F;llm&#x2F;">llm</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/2025/05/27/continer-ssh-server/" title="2025&#x2F;05&#x2F;27&#x2F;continer-ssh-server&#x2F;">continer ssh server</a>
         </li>
     </ul>
   </div>
