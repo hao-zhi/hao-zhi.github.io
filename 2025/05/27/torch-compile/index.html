@@ -28,7 +28,7 @@
 <meta property="og:description" content="torch.compile 的编译流程PyTorch + Inductor + Triton的整个编译流程，特别是triton kernel生成与编译分析这部分的过程。 整体编译流程 前端捕获（TorchDynamo）  捕获PyTorch的eager模型，生成一个FX Graph（中间表示IR）  图优化与分区（AOTAutograd + Decompositions）  对FX Graph进行">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-27T08:19:48.000Z">
-<meta property="article:modified_time" content="2025-06-05T08:13:57.524Z">
+<meta property="article:modified_time" content="2025-10-30T06:45:13.718Z">
 <meta property="article:author" content="郝智">
 <meta name="twitter:card" content="summary">
 
@@ -129,7 +129,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">20</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -231,7 +231,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-06-05 16:13:57" itemprop="dateModified" datetime="2025-06-05T16:13:57+08:00">2025-06-05</time>
+                <time title="修改时间：2025-10-30 14:45:13" itemprop="dateModified" datetime="2025-10-30T14:45:13+08:00">2025-10-30</time>
               </span>
 
           
@@ -529,7 +529,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -562,6 +562,9 @@
     </div>
     <ul class="links-of-recent-posts-list">
         <li class="links-of-recent-posts-item">
+          <a href="/2025/10/30/pipline-bubbles-and-kernel-gap/" title="2025&#x2F;10&#x2F;30&#x2F;pipline-bubbles-and-kernel-gap&#x2F;">pipline bubbles and kernel gap</a>
+        </li>
+        <li class="links-of-recent-posts-item">
           <a href="/2025/10/28/processes-and-threads/" title="2025&#x2F;10&#x2F;28&#x2F;processes-and-threads&#x2F;">processes and threads</a>
         </li>
         <li class="links-of-recent-posts-item">
@@ -572,9 +575,6 @@
         </li>
         <li class="links-of-recent-posts-item">
           <a href="/2025/05/27/profiler-tensorboard/" title="2025&#x2F;05&#x2F;27&#x2F;profiler-tensorboard&#x2F;">profiler tensorboard</a>
-        </li>
-        <li class="links-of-recent-posts-item">
-          <a href="/2025/05/27/pdb-debug/" title="2025&#x2F;05&#x2F;27&#x2F;pdb-debug&#x2F;">pdb debug</a>
         </li>
     </ul>
   </div>
